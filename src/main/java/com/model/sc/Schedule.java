@@ -1,11 +1,7 @@
 package com.model.sc;
 
-import org.springframework.data.annotation.Id;
+import javax.persistence.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Table;
 
 /**
  * Created by maysam.mokarian on 10/24/2017.
@@ -15,10 +11,14 @@ import javax.persistence.Table;
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private int schedule_id;
+    @Column(name = "weekDay")
     private String weekDay;
+    @Column(name = "timeLine")
     private String timeLine;
+    @Column(name = "classType")
     private String classType;
+    @Column(name = "courseId")
     private String courseId;
 
     public String getWeekDay() {
@@ -45,12 +45,12 @@ public class Schedule {
         this.classType = classType;
     }
 
-    public int getId() {
-        return id;
+    public int getSchedule_id() {
+        return schedule_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setSchedule_id(int schedule_id) {
+        this.schedule_id = schedule_id;
     }
 
     public String getCourseId() {

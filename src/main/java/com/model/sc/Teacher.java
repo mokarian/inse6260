@@ -8,17 +8,31 @@ import java.util.Set;
 /**
  * Created by maysam.mokarian on 10/24/2017.
  */
+@Entity
+@Table(name = "teacher")
 public class Teacher extends User {
 
-    @Column(name = "address")
-    private String address;
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "teacher_courseHistory", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "courseHistory_id"))
+    @JoinTable(name = "user_coursehistory", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "coursehistory_id"))
     private Set<CourseHistory> courseHistory;
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "teacher_course", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
+    @JoinTable(name = "user_course", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
     private Set<Course>  coursesForCurrentSemester;
 
 
+    public Set<CourseHistory> getCourseHistory() {
+        return courseHistory;
+    }
 
+    public void setCourseHistory(Set<CourseHistory> courseHistory) {
+        this.courseHistory = courseHistory;
+    }
+
+    public Set<Course> getCoursesForCurrentSemester() {
+        return coursesForCurrentSemester;
+    }
+
+    public void setCoursesForCurrentSemester(Set<Course> coursesForCurrentSemester) {
+        this.coursesForCurrentSemester = coursesForCurrentSemester;
+    }
 }

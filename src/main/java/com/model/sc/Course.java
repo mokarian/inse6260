@@ -1,11 +1,7 @@
 package com.model.sc;
 
-import org.springframework.data.annotation.Id;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,17 +13,19 @@ import java.util.List;
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private int course_id;
+    @Column(name = "coursename")
     private String courseName;
+    @Column(name = "prerequisites")
     private String preRequisites;
     private int schedule_id;
 
-    public int getId() {
-        return id;
+    public int getCourse_id() {
+        return course_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCourse_id(int course_id) {
+        this.course_id = course_id;
     }
 
     public String getCourseName() {
