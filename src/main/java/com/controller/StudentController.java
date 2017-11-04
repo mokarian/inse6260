@@ -29,7 +29,7 @@ public class StudentController {
     public ModelAndView studentHome() {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
+/*
     Student student = new Student().makeStudent();
         student.setPhone("322322323");
         student.setAddress("dasd");
@@ -39,6 +39,7 @@ public class StudentController {
         courses.add(course);
         student.setCoursesForCurrentSemester(courses);
         studentService.saveStudent(student);
+        */
        // User user = userService.findUserByEmail(auth.getName());
        // modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
         modelAndView.addObject("studentMessage", "Content Available Only for Users with student Role");

@@ -28,7 +28,7 @@ public class Student extends User {
     private Set<Course> coursesForCurrentSemester;
     @Column(name = "tuition")
     private BigDecimal tuition;
-
+ /*
     public Student makeStudent() {
         Student student = new Student();
         student.setEmail("test@concordia.com");
@@ -38,6 +38,7 @@ public class Student extends User {
         student.setUser_id(77);
         return student;
     }
+    */
 
     public String getAddress() {
         return address;
