@@ -23,7 +23,7 @@ public class ProfessorController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
         modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
-        modelAndView.addObject("professorMessage", "Content Available Only for Users with professor Role");
+        modelAndView.addObject("professorMessage", "Content Available Only for Users with Professor Role");
         modelAndView.setViewName("professor/home");
         return modelAndView;
     }

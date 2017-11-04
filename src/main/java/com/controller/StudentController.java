@@ -42,14 +42,43 @@ public class StudentController {
         */
        // User user = userService.findUserByEmail(auth.getName());
        // modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
-        modelAndView.addObject("studentMessage", "Content Available Only for Users with student Role");
+        modelAndView.addObject("studentMessage", "Content Available Only for Users with Student Role");
         modelAndView.setViewName("student/home");
         return modelAndView;
     }
 
+    @RequestMapping(value = "/student/enroll", method = RequestMethod.GET)
+    public ModelAndView studentEnroll() {
+        ModelAndView modelAndView = new ModelAndView();
 
+        return modelAndView;
+    }
 
+    @RequestMapping(value = "/student/schedule", method = RequestMethod.GET)
+    public ModelAndView studentSchedule() {
+        ModelAndView modelAndView = new ModelAndView();
 
+        return modelAndView;
+    }
 
+    @RequestMapping(value = "/student/grades", method = RequestMethod.GET)
+    public ModelAndView studentGrades() {
+        ModelAndView modelAndView = new ModelAndView();
 
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/student/tuition", method = RequestMethod.GET)
+    public ModelAndView studentTuition() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/student/contactinfo", method = RequestMethod.GET)
+    public ModelAndView studentContactInfo() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        return modelAndView;
+    }
 }
