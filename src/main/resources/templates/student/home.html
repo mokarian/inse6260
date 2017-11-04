@@ -26,17 +26,17 @@
 				<div class="panel-body">
 					<img th:src="@{/images/ev.jpg}" class="img-responsive center-block" width="400" height="400" alt="Beer" />
 				</div>
-				<button class="btn btn-md btn-block" name="Enroll"
-						type="Submit">Enroll</button>
-				<button class="btn btn-md btn-block" name="Schedule"
-						type="Submit">View Class Schedule</button>
-				<button class="btn btn-md btn-block" name="Grades"
-						type="Submit">View Grades</button>
-				<button class="btn btn-md btn-block" name="Tuition"
-						type="Submit">View Pending Tuition</button>
-				<button class="btn btn-md btn-block" name="ContactInfo"
-						type="Submit">Update Contact Information</button>
 				<p class="admin-message-text text-center" th:utext="${studentMessage}"></p>
+                <button class="btn btn-md btn-primary btn-block" name="Enroll"
+                        type="Submit">Enroll</button>
+                <button class="btn btn-md btn-primary btn-block" name="Schedule"
+                        type="Submit">View Class Schedule</button>
+                <button class="btn btn-md btn-primary btn-block" name="Grades"
+                        type="Submit">View Grades</button>
+                <button class="btn btn-md btn-primary btn-block" name="Tuition"
+                        type="Submit">View Tuition</button>
+                <button class="btn btn-md btn-primary btn-block" name="ContactInfo"
+                        type="Submit">Update Contact Information</button>
 			</div>
 		</div>
 		
