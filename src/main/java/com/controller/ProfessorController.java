@@ -27,4 +27,18 @@ public class ProfessorController {
         modelAndView.setViewName("professor/home");
         return modelAndView;
     }
+
+    @RequestMapping(value = "/professor/grades", method = RequestMethod.GET)
+    public ModelAndView professorGrades() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/professor/contactinfo", method = RequestMethod.GET)
+    public ModelAndView professorContactInfo() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        return modelAndView;
+    }
 }

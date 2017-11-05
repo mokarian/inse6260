@@ -30,4 +30,10 @@ public class AdminController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/admin/enroll", method = RequestMethod.GET)
+    public ModelAndView adminEnroll() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        return modelAndView;
+    }
 }
