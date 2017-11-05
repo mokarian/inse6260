@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.sql.ResultSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,6 +51,14 @@ public class StudentController {
     @RequestMapping(value = "/student/enroll", method = RequestMethod.GET)
     public ModelAndView studentEnroll() {
         ModelAndView modelAndView = new ModelAndView();
+        // There are 74 courses which students can pick from
+        int numCourses = 74;
+        Course courseTable = new Course();
+        String[] courses = new String[numCourses];
+
+        // Get the course from database
+
+        // Send the courses to the enroll page
 
         return modelAndView;
     }

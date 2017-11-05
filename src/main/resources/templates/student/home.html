@@ -28,7 +28,8 @@
 				</div>
 				<p class="admin-message-text text-center" th:utext="${studentMessage}"></p>
                 <form th:action="@{/student/enroll}" method="get">
-                    <button class="btn btn-md btn-primary btn-block" type="Submit">Enroll </button>
+                    <button class="btn btn-md btn-primary btn-block" name="Enroll" th:text="Enroll" type="Submit">
+                        Enroll </button>
                 </form>
                 <form th:action="@{/student/schedule}" method="get">
                     <button class="btn btn-md btn-primary btn-block" type="Submit">View Class Schedule</button>
