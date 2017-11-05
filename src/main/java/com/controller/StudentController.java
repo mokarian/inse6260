@@ -52,7 +52,7 @@ public class StudentController {
     public ModelAndView studentEnroll() {
         ModelAndView modelAndView = new ModelAndView();
         // There are 74 courses which students can pick from
-        int numCourses = 74;
+        int numCourses = 69;
         Course courseTable = new Course();
         String[] courses = new String[numCourses];
 

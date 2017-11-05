@@ -63,13 +63,23 @@ VALUES (1, "COMP 691", "comp"),
 (62, "COMP 7941", "comp"),
 (63, "ENCS 6931", "encs"),
 (64, "SOEN 7941", "soen"),
-(65, "SOEN 6501", "soen"),
-(66, "ENCS 8011", "encs"),
-(67, "ENCS 8511", "encs"),
-(68, "COMP 8901", "comp"),
-(69, "SOEN 8901", "soen"),
-(70, "ENCS 8501", "encs"),
-(71, "COEN 7311", "coen"),
-(72, "ENCS 6021", "encs"),
-(73, "ENCS 6161", "encs"),
-(74, "ENCS 6181", "encs");
+(65, "SOEN 6501", "soen"),,
+(66, "COEN 7311", "coen"),
+(67, "ENCS 6021", "encs"),
+(68, "ENCS 6161", "encs"),
+(69, "ENCS 6181", "encs");
+
+UPDATE `inse`.`course` SET `preRequisites`='COMP 6761' WHERE `course_id`='7';
+UPDATE `inse`.`course` SET `preRequisites`='COMP 6281' WHERE `course_id`='5';
+UPDATE `inse`.`course` SET `preRequisites`='COMP 6461' WHERE `course_id`='6';
+UPDATE `inse`.`course` SET `preRequisites`='COMP 6411' WHERE `course_id`='19';
+UPDATE `inse`.`course` SET `preRequisites`='COMP 6651' WHERE `course_id`='31';
+UPDATE `inse`.`course` SET `preRequisites`='COMP 6521' WHERE `course_id`='24';
+UPDATE `inse`.`course` SET `preRequisites`='COMP 6651' WHERE `course_id`='32';
+UPDATE `inse`.`course` SET `preRequisites`='COMP 6761' WHERE `course_id`='13';
+UPDATE `inse`.`course` SET `preRequisites`='COMP 6731' WHERE `course_id`='14';
+UPDATE `inse`.`course` SET `preRequisites`='COMP 6771' WHERE `course_id`='15';
+UPDATE `inse`.`course` SET `preRequisites`='SOEN 6461' WHERE `course_id`='50';
+UPDATE `inse`.`course` SET `preRequisites`='SOEN 6461' WHERE `course_id`='52';
+UPDATE `inse`.`course` SET `preRequisites`='SOEN 6481' WHERE `course_id`='52';
+UPDATE `inse`.`course` SET `preRequisites`='SOEN 6751' WHERE `course_id`='43';
