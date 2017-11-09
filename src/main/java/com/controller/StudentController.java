@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.sql.ResultSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public class StudentController {
     public ModelAndView studentHome() {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
+/*
     Student student = new Student().makeStudent();
         student.setPhone("322322323");
         student.setAddress("dasd");
@@ -39,16 +40,54 @@ public class StudentController {
         courses.add(course);
         student.setCoursesForCurrentSemester(courses);
         studentService.saveStudent(student);
+        */
        // User user = userService.findUserByEmail(auth.getName());
        // modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
-        modelAndView.addObject("studentMessage", "Content Available Only for Users with student Role");
+        modelAndView.addObject("studentMessage", "Content Available Only for Users with Student Role");
         modelAndView.setViewName("student/home");
         return modelAndView;
     }
 
+    @RequestMapping(value = "/student/enroll", method = RequestMethod.GET)
+    public ModelAndView studentEnroll() {
+        ModelAndView modelAndView = new ModelAndView();
+        // There are 74 courses which students can pick from
+        int numCourses = 69;
+        Course courseTable = new Course();
+        String[] courses = new String[numCourses];
 
+        // Get the course from database
 
+        // Send the courses to the enroll page
 
+        return modelAndView;
+    }
 
+    @RequestMapping(value = "/student/schedule", method = RequestMethod.GET)
+    public ModelAndView studentSchedule() {
+        ModelAndView modelAndView = new ModelAndView();
 
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/student/grades", method = RequestMethod.GET)
+    public ModelAndView studentGrades() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/student/tuition", method = RequestMethod.GET)
+    public ModelAndView studentTuition() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/student/contactinfo", method = RequestMethod.GET)
+    public ModelAndView studentContactInfo() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        return modelAndView;
+    }
 }

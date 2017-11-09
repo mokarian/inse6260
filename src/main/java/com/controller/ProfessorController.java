@@ -23,8 +23,22 @@ public class ProfessorController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
         modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
-        modelAndView.addObject("professorMessage", "Content Available Only for Users with professor Role");
+        modelAndView.addObject("professorMessage", "Content Available Only for Users with Professor Role");
         modelAndView.setViewName("professor/home");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/professor/grades", method = RequestMethod.GET)
+    public ModelAndView professorGrades() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/professor/contactinfo", method = RequestMethod.GET)
+    public ModelAndView professorContactInfo() {
+        ModelAndView modelAndView = new ModelAndView();
+
         return modelAndView;
     }
 }

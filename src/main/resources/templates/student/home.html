@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title>Admin Page</title>
+<title>Student Center</title>
 <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -27,6 +27,22 @@
 					<img th:src="@{/images/ev.jpg}" class="img-responsive center-block" width="400" height="400" alt="Beer" />
 				</div>
 				<p class="admin-message-text text-center" th:utext="${studentMessage}"></p>
+                <form th:action="@{/student/enroll}" method="get">
+                    <button class="btn btn-md btn-primary btn-block" name="Enroll" th:text="Enroll" type="Submit">
+                        Enroll </button>
+                </form>
+                <form th:action="@{/student/schedule}" method="get">
+                    <button class="btn btn-md btn-primary btn-block" type="Submit">View Class Schedule</button>
+                </form>
+                <form th:action="@{/student/grades}" method="get">
+                    <button class="btn btn-md btn-primary btn-block" type="Submit">View Grades</button>
+                </form>
+                <form th:action="@{/student/tuition}" method="get">
+                    <button class="btn btn-md btn-primary btn-block" type="Submit">View Tuition</button>
+                </form>
+                <form th:action="@{/student/contactinfo}" method="get">
+                    <button class="btn btn-md btn-primary btn-block" type="Submit">Update Contact Information</button>
+                </form>
 			</div>
 		</div>
 		

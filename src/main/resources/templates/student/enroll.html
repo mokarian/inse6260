@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Center</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <form th:action="@{/student/home}" method="get">
+            <button class="btn btn-md btn-warning btn-block" type="Submit">Go To Home Page</button>
+        </form>
+        <div class="panel-group" style="margin-top:40px">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Course Enrollment</span>
+                </div>
+                <div class="panel-body">
+                    // Add the courses given by StudentController to a drop down list
+                    <div class="dropdown">
+                        <button class="btn btn-md btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            Add to Course Cart<span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">course1</a></li>
+                            <li><a href="#">course2</a></li>
+                            <li><a href="#">course3</a></li>
+                        </ul>
+                    </div>
+                        // Add the courses the student is currently registered in to a drop down list
+                        <div class="dropdown">
+                        <button class="btn btn-md btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
+                            Drop<span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">course1</a></li>
+                                <li><a href="#">course2</a></li>
+                                <li><a href="#">course3</a></li>
+                            </ul>
+                        </div>
+                        // Show all courses added to course cart
+                        <div>
+                            <button class="btn btn-md btn-success" type="Submit">Enroll</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
