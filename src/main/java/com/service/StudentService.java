@@ -25,4 +25,8 @@ public class StudentService {
         studentRepository.saveAndFlush(student);
     }
 
+    public Student findByEmail(String email) {
+       return studentRepository.findByEmail(email);
+    }
+
 }
