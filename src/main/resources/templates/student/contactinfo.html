@@ -19,6 +19,35 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">Contact Information</div>
                 <div class="panel-body">
+                    <b>Phone: </b><p th:utext="${phoneToShow}"></p>
+                    <b>Address: </b><p th:utext="${addressToShow}"></p>
+
+                    <form autocomplete="off" action="#" th:action="@{/student/contactinfo}"
+                          th:object="${contactInfoRequest}" method="post" class="form-horizontal"
+                          role="form">
+                        <h2>change address</h2>
+                        <div class="form-group">
+                            <div class="col-sm-9">
+                                <label>Phone</label>
+                                <input type="text" th:field="*{phone}" placeholder="phone"
+                                       class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-9">
+                                <label>Address</label>
+                                <input type="text" th:field="*{address}"
+                                       placeholder="address" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-9">
+                                <button type="submit" class="btn btn-primary btn-block">change address</button>
+                            </div>
+                        </div>
+                        <span th:utext="${successMessage}" style="color:darkgreen"></span>
+                    </form>
+
                 </div>
             </div>
         </div>

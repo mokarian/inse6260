@@ -23,6 +23,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -94,9 +95,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
     }
 
+
     @PostConstruct
     public void initDatabase() {
-        // Role userRole = roleRepository.findByRole("ADMIN");
         Role admin = new Role();
         admin.setRole(ADMIN);
         admin.setId(1);
@@ -109,10 +110,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         roleRepository.save(admin);
         roleRepository.save(student);
         roleRepository.save(professor);
-    }
-
-    @PostConstruct
-    public void initUsers() {
         storeUserToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 1);
         storeStudentToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT,  1);
 //        storeUserToDatabase("freyjaj", "Jökulsdóttir", "freyjaj@concordia.ca", STUDENT, 2);
@@ -147,6 +144,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         student.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
         student.setCoursesForCurrentSemester(getCourses());
         student.setCourseHistory(createCourseHistory());
+        student.setAddress("45 Forden Crescent, Westmount, Quebec H3Y 3H2 Canada");
+        student.setPhone("(514)226-0101");
+        student.setTuition(new BigDecimal(2300));
         studentRepository.save(student);
     }
 

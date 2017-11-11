@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.model.User;
+import com.model.request.ContactInfoRequest;
 import com.model.sc.Course;
 import com.model.sc.Student;
 import com.service.StudentService;
@@ -69,11 +70,11 @@ public class StudentController {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Student user = studentService.findByEmail(auth.getName());
-
-        Iterator iterator = user.getCoursesForCurrentSemester().iterator();
         List<String> list = new ArrayList<>();
-        while (iterator.hasNext()) {
-            list.add("ID:" + ((Course) iterator.next()).getCourse_id() + ",COURSE_NAME:" + ((Course) iterator.next()).getCourseName() + ", SEMESTER:" + ((Course) iterator.next()).getSemester());
+        List<Course> listOfCourses = new ArrayList<>();
+        listOfCourses.addAll(user.getCoursesForCurrentSemester());
+        for (Course course : listOfCourses) {
+            list.add("ID:" + (course.getCourse_id() + ",COURSE_NAME:" + course.getCourseName() + ", SEMESTER:" + course.getSemester()));
         }
         modelAndView.addObject("schedule", list);
         modelAndView.setViewName("student/schedule");
@@ -107,11 +108,30 @@ public class StudentController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/student/contactinfo", method = RequestMethod.GET)
-    public ModelAndView studentContactInfo() {
+    @RequestMapping(value = "/student/contactinfo", method = RequestMethod.POST)
+    public ModelAndView studentContactInfo(ContactInfoRequest contactInfoRequest) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Student student = studentService.findByEmail(auth.getName());
+        student.setPhone(contactInfoRequest.getPhone());
+        student.setAddress(contactInfoRequest.getAddress());
+        studentService.saveStudent(student);
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("phoneToShow", student.getPhone());
+        modelAndView.addObject("addressToShow", student.getAddress());
+        modelAndView.addObject("successMessage","your Address and Phone changed successfully" );
+        modelAndView.setViewName("student/contactinfo");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/student/contactinfo", method = RequestMethod.GET)
+    public ModelAndView studentContactInfoGet() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("contactInfoRequest", new ContactInfoRequest());
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Student user = studentService.findByEmail(auth.getName());
+        modelAndView.addObject("phoneToShow", user.getPhone());
+        modelAndView.addObject("addressToShow", user.getAddress());
+        modelAndView.setViewName("student/contactinfo");
 
         return modelAndView;
     }
