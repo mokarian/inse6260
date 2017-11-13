@@ -2,7 +2,9 @@ package com.controller;
 
 import com.model.User;
 import com.model.request.ContactInfoRequest;
+import com.model.request.TuitionRequest;
 import com.model.sc.Course;
+import com.model.sc.Schedule;
 import com.model.sc.Student;
 import com.service.StudentService;
 import com.service.UserService;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.expression.Strings;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.util.*;
 
@@ -71,12 +74,14 @@ public class StudentController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Student user = studentService.findByEmail(auth.getName());
         List<String> list = new ArrayList<>();
-        List<Course> listOfCourses = new ArrayList<>();
-        listOfCourses.addAll(user.getCoursesForCurrentSemester());
-        for (Course course : listOfCourses) {
-            list.add("ID:" + (course.getCourse_id() + ",COURSE_NAME:" + course.getCourseName() + ", SEMESTER:" + course.getSemester()));
-        }
-        modelAndView.addObject("schedule", list);
+        List<String> listOfCourses = new ArrayList<>();
+      //  listOfCourses.addAll(user.getCoursesForCurrentSemester());
+//        for (Course course : user.getCoursesForCurrentSemester()) {
+////            list.add("ID:" + (course.getCourse_id() + ",COURSE_NAME:" + course.getCourseName() + ", SEMESTER:" + course.getSemester()));
+//            listOfCourses.add(course.getCourseName());
+//            listOfCourses.add(course.toString());
+//        }
+        modelAndView.addObject("courses", user.getCoursesForCurrentSemester());
         modelAndView.setViewName("student/schedule");
         return modelAndView;
     }
@@ -103,8 +108,40 @@ public class StudentController {
 
     @RequestMapping(value = "/student/tuition", method = RequestMethod.GET)
     public ModelAndView studentTuition() {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("tuitionRequest", new TuitionRequest());
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Student user = studentService.findByEmail(auth.getName());
+
+        modelAndView.addObject("tuition",user.getTuition().toString());
+        modelAndView.setViewName("student/tuition");
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/student/tuition", method = RequestMethod.POST)
+    public ModelAndView studentTuitionPost(TuitionRequest tuitionRequest) {
         ModelAndView modelAndView = new ModelAndView();
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Student user = studentService.findByEmail(auth.getName());
+        String message="";
+        if(user.getTuition().subtract(new BigDecimal(tuitionRequest.getAmount())).signum() == -1){
+            message = "the amount entered is more than your tuition fee";
+        }
+        else if(user.getTuition().subtract(new BigDecimal(tuitionRequest.getAmount())).signum() == +1){
+            message = "the amount entered is not enough";
+        }
+        else{
+            user.setTuition(new BigDecimal(0));
+            studentService.saveStudent(user);
+            message="you successfully payed your tuition fee";
+        }
+        modelAndView.addObject("tuition",user.getTuition().toString());
+        modelAndView.addObject("message",message);
+        modelAndView.setViewName("student/tuition");
         return modelAndView;
     }
 

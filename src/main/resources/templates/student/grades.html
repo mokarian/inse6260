@@ -19,10 +19,19 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">Grades</span>
                 </div>
-                <div class="panel-body">
-                    <p th:utext="${grades}"></p>
-                    <!--<p>CGPA:</p>-->
-                </div>
+                <!--<div class="panel-body">-->
+                    <!--<p th:utext="${grades}"></p>-->
+                    <!--&lt;!&ndash;<p>CGPA:</p>&ndash;&gt;-->
+                <!--</div>-->
+
+                <table class="table table-striped">
+                    <tr>
+                        <th>Grades</th>
+                    </tr>
+                    <tr th:each="grade : ${grades}">
+                        <td th:text="${grade}"></td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>

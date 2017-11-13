@@ -41,6 +41,7 @@ CREATE TABLE `course` (
   `dtype`         varchar(255) DEFAULT NULL,
   `schedule_id` int(11)  DEFAULT NULL,
   `semester` varchar(255) DEFAULT NULL,
+  `schedule` varchar(255) DEFAULT NULL,
   `grade` FLOAT(5) DEFAULT NULL,
   PRIMARY KEY (`course_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;

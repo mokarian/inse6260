@@ -3,9 +3,34 @@ package com.model.sc;
 /**
  * Created by maysam.mokarian on 10/24/2017.
  */
-public final class TimeLine {
-    final static String MORNING_TO_NOON="9-12 AM";
-    final static String NOON_TO_THREE="1-3 PM";
-    final static String THREE_TO_FIVE="3-5 PM";
-    final static String FIVE_TO_SEVEN="5-7 PM";
+public enum  TimeLine {
+    MONDAY_9AM_TO_12PM,
+    MONDAY_1PM_TO_3PM,
+    MONDAY_3PM_TO_5PM,
+    MONDAY_5PM_TO_7PM,
+    MONDAY_7PM_TO_9PM,
+
+    TUESDAY_9AM_TO_12PM,
+    TUESDAY_1PM_TO_3PM,
+    TUESDAY_3PM_TO_5PM,
+    TUESDAY_5PM_TO_7PM,
+    TUESDAY_7PM_TO_9PM,
+
+    WEDNESDAY_9AM_TO_12PM,
+    WEDNESDAY_1PM_TO_3PM,
+    WEDNESDAY_3PM_TO_5PM,
+    WEDNESDAY_5PM_TO_7PM,
+    WEDNESDAY_7PM_TO_9PM,
+
+    THURSDAY_9AM_TO_12PM,
+    THURSDAY_1PM_TO_3PM,
+    THURSDAY_3PM_TO_5PM,
+    THURSDAY_5PM_TO_7PM,
+    THURSDAY_7PM_TO_9PM,
+
+    FRIDAY_9AM_TO_12PM,
+    FRIDAY_1PM_TO_3PM,
+    FRIDAY_3PM_TO_5PM,
+    FRIDAY_5PM_TO_7PM,
+    FRIDAY_7PM_TO_9PM,
 }

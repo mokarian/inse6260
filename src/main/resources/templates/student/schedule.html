@@ -20,8 +20,17 @@
                 <div class="panel-heading">Class Schedule</span>
                 </div>
                 <div class="panel-body">
-                    <p>My weekly Schedule:</p>
-                    <p class="admin-message-text text-center" th:utext="${schedule}"></p>
+
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Course: Schedule</th>
+                        </tr>
+                        <tr th:each="course : ${courses}">
+                            <td th:text="${course}"></td>
+                        </tr>
+                    </table>
+
+
                     <!--<table class="table table-bordered">-->
                         <!--<thead>-->
                         <!--<tr>-->

@@ -6,9 +6,7 @@ import javax.xml.transform.Source;
 
 import com.model.Role;
 import com.model.User;
-import com.model.sc.Course;
-import com.model.sc.Schedule;
-import com.model.sc.Student;
+import com.model.sc.*;
 import com.repository.RoleRepository;
 import com.repository.StudentRepository;
 import com.repository.UserRepository;
@@ -158,9 +156,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         course2.setCourseName("COMP 6761");
         course2.setPreRequisites("COMP 6311");
         Set<Course> courses = new HashSet<>();
+        Set<Schedule> scheduleSetFirstCourse = getSchedules(CourseType.LECTURE,TimeLine.FRIDAY_5PM_TO_7PM,CourseType.LAB,TimeLine.MONDAY_1PM_TO_3PM);
+        Set<Schedule> scheduleSetSecondCourse = getSchedules(CourseType.LECTURE,TimeLine.WEDNESDAY_1PM_TO_3PM,CourseType.LAB,TimeLine.THURSDAY_7PM_TO_9PM);
+        course1.setSchedules(scheduleSetFirstCourse);
+        course2.setSchedules(scheduleSetSecondCourse);
         courses.add(course1);
         courses.add(course2);
         return courses;
+    }
+
+    private Set<Schedule> getSchedules(CourseType courseType1, TimeLine timeline1, CourseType courseType2, TimeLine timeLine2) {
+        Schedule schedule= new Schedule();
+        schedule.setCourseType(courseType1);
+        schedule.setTimeLine(timeline1);
+        Schedule schedule1= new Schedule();
+        schedule1.setCourseType(courseType2);
+        schedule1.setTimeLine(timeLine2);
+        return new HashSet<>(Arrays.asList(schedule,schedule1));
     }
 
     private Set<Course> createCourseHistory() {
@@ -171,26 +183,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         courseHistory.setGrade(3.4f);
         courseHistory.setSemester("FALL 2016");
 //        courseHistory.setCourse_id(1);
-        courseHistory.setSchedule_id(1);
+        courseHistory.setSchedules(getSchedules(CourseType.LECTURE,TimeLine.WEDNESDAY_1PM_TO_3PM,CourseType.LAB,TimeLine.THURSDAY_7PM_TO_9PM));
         Course courseHistory1 = new Course();
-        courseHistory.setCourseName("COMP 352");
+        courseHistory1.setCourseName("COMP 352");
 //        courseHistory.setCourse_id(2);
-        courseHistory.setPreRequisites("COMP 249");
+        courseHistory1.setPreRequisites("COMP 249");
         courseHistory1.setGrade(4f);
         courseHistory1.setSemester("SUMMER 2016");
-        courseHistory1.setSchedule_id(1);
+        courseHistory1.setSchedules(getSchedules(CourseType.LECTURE,TimeLine.MONDAY_3PM_TO_5PM,CourseType.LAB,TimeLine.THURSDAY_7PM_TO_9PM));
         Course courseHistory2 = new Course();
-        courseHistory.setCourseName("COMP 6260");
-        courseHistory.setPreRequisites("COMP 6250");
+        courseHistory2.setCourseName("COMP 6260");
+        courseHistory2.setPreRequisites("COMP 6250");
         courseHistory2.setGrade(3f);
         courseHistory2.setSemester("WINTER 2016");
-        courseHistory2.setSchedule_id(1);
+        courseHistory2.setSchedules(getSchedules(CourseType.LECTURE,TimeLine.WEDNESDAY_1PM_TO_3PM,CourseType.TUTORIAL,TimeLine.TUESDAY_1PM_TO_3PM));
         Course courseHistory3 = new Course();
-        courseHistory.setCourseName("ENGR 6260");
-        courseHistory.setPreRequisites("ENGR 6250");
+        courseHistory3.setCourseName("ENGR 6260");
+        courseHistory3.setPreRequisites("ENGR 6250");
         courseHistory3.setGrade(2.9f);
         courseHistory3.setSemester("WINTER 2015");
-        courseHistory3.setSchedule_id(1);
+        courseHistory3.setSchedules(getSchedules(CourseType.LECTURE,TimeLine.MONDAY_3PM_TO_5PM,CourseType.TUTORIAL,TimeLine.FRIDAY_9AM_TO_12PM));
         Set<Course> courseHistories = new HashSet<>();
         courseHistories.add(courseHistory);
         courseHistories.add(courseHistory1);

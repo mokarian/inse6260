@@ -22,7 +22,11 @@
                 <div class="panel-body">
                     <h2>Pending</h2>
                     <br>
-                    // Display pending fees here
+
+                    <p th:utext="${tuition}"></p>
+
+                    <p th:utext="${message}"></p>
+
                     <br>
                     <h2>Payment</h2>
                     <div class="paymentWrap">
@@ -41,10 +45,10 @@
                             </label>
                         </div>
                     </div>
-                    <form>
+                    <form  th:action="@{/student/tuition}" method="post" th:object="${tuitionRequest}">
                         <div class="col-xs-2">
                             <label for="ex1">Amount to Pay</label>
-                            <input class="form-control" id="ex1" type="text">
+                            <input class="form-control" id="ex1" type="text"  th:field="*{amount}">
                         </div>
                         <div class="form-group row">
                             <div class="col-xs-3">
@@ -63,6 +67,7 @@
                         <div>
                             <button class="btn btn-md btn-success" type="Submit">Submit</button>
                         </div>
+
                     </form>
                 </div>
             </div>

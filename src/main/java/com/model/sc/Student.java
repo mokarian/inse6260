@@ -78,4 +78,15 @@ public class Student extends User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                ", courseHistory=" + courseHistory +
+                ", coursesForCurrentSemester=" + coursesForCurrentSemester +
+                ", tuition=" + tuition +
+                '}';
+    }
 }
