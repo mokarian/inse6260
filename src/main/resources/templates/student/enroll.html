@@ -15,6 +15,25 @@
         <form th:action="@{/student/home}" method="get">
             <button class="btn btn-md btn-warning btn-block" type="Submit">Go To Home Page</button>
         </form>
+
+        <table class="table table-striped">
+            <tr>
+                <th>Courses taken for current semester</th>
+            </tr>
+            <tr th:each="course : ${courses}">
+
+
+                <td th:text="${course}">
+                </td>
+                <form  th:action="@{/student/enroll}" method="post" th:value="${course}">
+
+                    <button class="btn btn-md btn-success" type="Submit">drop</button>
+                </form>
+            </tr>
+
+        </table>
+
+
         <div class="panel-group" style="margin-top:40px">
             <div class="panel panel-primary">
                 <div class="panel-heading">Course Enrollment</span>

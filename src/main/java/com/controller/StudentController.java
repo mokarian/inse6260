@@ -55,16 +55,27 @@ public class StudentController {
     @RequestMapping(value = "/student/enroll", method = RequestMethod.GET)
     public ModelAndView studentEnroll() {
         ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Student user = studentService.findByEmail(auth.getName());
 
-        // There are 74 courses which students can pick from
-        int numCourses = 69;
-        Course courseTable = new Course();
-        String[] courses = new String[numCourses];
+        List<String> list = new ArrayList<>();
+        List<Course> listOfCourses = new ArrayList<>();
+        listOfCourses.addAll(user.getCoursesForCurrentSemester());
+        for (Course course : listOfCourses) {
+            list.add(course.getCourseName());
+        }
+        modelAndView.addObject("courses", list);
+        modelAndView.setViewName("student/enroll");
+        return modelAndView;
+    }
 
-        // Get the course from database
+    @RequestMapping(value = "/student/enroll", method = RequestMethod.POST)
+    public ModelAndView studentEnrollPost(String course) {
+        ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Student user = studentService.findByEmail(auth.getName());
 
-        // Send the courses to the enroll page
-
+        modelAndView.setViewName("student/enroll");
         return modelAndView;
     }
 
@@ -75,12 +86,7 @@ public class StudentController {
         Student user = studentService.findByEmail(auth.getName());
         List<String> list = new ArrayList<>();
         List<String> listOfCourses = new ArrayList<>();
-      //  listOfCourses.addAll(user.getCoursesForCurrentSemester());
-//        for (Course course : user.getCoursesForCurrentSemester()) {
-////            list.add("ID:" + (course.getCourse_id() + ",COURSE_NAME:" + course.getCourseName() + ", SEMESTER:" + course.getSemester()));
-//            listOfCourses.add(course.getCourseName());
-//            listOfCourses.add(course.toString());
-//        }
+
         modelAndView.addObject("courses", user.getCoursesForCurrentSemester());
         modelAndView.setViewName("student/schedule");
         return modelAndView;
