@@ -1,5 +1,5 @@
 INSERT INTO course (course_id, courseName, dtype)
-VALUES (1, "COMP 691", "comp"),
+VALUES (1, "COMP 691", "comp");
 (2, "COMP 791", "comp"),
 (3, "COMP 6231", "comp"),
 (4, "COMP 6281", "comp"),
