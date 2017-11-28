@@ -135,6 +135,8 @@ public class Course {
         if (getDtype() != null ? !getDtype().equals(course.getDtype()) : course.getDtype() != null) return false;
         if (getPreRequisites() != null ? !getPreRequisites().equals(course.getPreRequisites()) : course.getPreRequisites() != null)
             return false;
+        if (getSchedules() != null ? !getSchedules().equals(course.getSchedules()) : course.getSchedules() != null)
+            return false;
         return getSemester() != null ? getSemester().equals(course.getSemester()) : course.getSemester() == null;
     }
 
