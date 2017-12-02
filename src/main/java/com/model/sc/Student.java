@@ -2,7 +2,6 @@ package com.model.sc;
 
 import com.model.User;
 import com.model.sc.Course;
-import com.model.sc.CourseHistory;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -22,7 +21,7 @@ public class Student extends User {
     private String phone;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_coursehistory", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "coursehistory_id"))
-    private Set<CourseHistory> courseHistory;
+    private Set<Course> courseHistory;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_course", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
     private Set<Course> coursesForCurrentSemester;
@@ -48,11 +47,11 @@ public class Student extends User {
         this.address = address;
     }
 
-    public Set<CourseHistory> getCourseHistory() {
+    public Set<Course> getCourseHistory() {
         return courseHistory;
     }
 
-    public void setCourseHistory(Set<CourseHistory> courseHistory) {
+    public void setCourseHistory(Set<Course> courseHistory) {
         this.courseHistory = courseHistory;
     }
 
@@ -78,5 +77,16 @@ public class Student extends User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                ", courseHistory=" + courseHistory +
+                ", coursesForCurrentSemester=" + coursesForCurrentSemester +
+                ", tuition=" + tuition +
+                '}';
     }
 }

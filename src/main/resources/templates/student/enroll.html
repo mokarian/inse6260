@@ -15,38 +15,42 @@
         <form th:action="@{/student/home}" method="get">
             <button class="btn btn-md btn-warning btn-block" type="Submit">Go To Home Page</button>
         </form>
-        <div class="panel-group" style="margin-top:40px">
-            <div class="panel panel-primary">
-                <div class="panel-heading">Course Enrollment</span>
-                </div>
-                <div class="panel-body">
-                    // Add the courses given by StudentController to a drop down list
-                    <div class="dropdown">
-                        <button class="btn btn-md btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                            Add to Course Cart<span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">course1</a></li>
-                            <li><a href="#">course2</a></li>
-                            <li><a href="#">course3</a></li>
-                        </ul>
-                    </div>
-                        // Add the courses the student is currently registered in to a drop down list
-                        <div class="dropdown">
-                        <button class="btn btn-md btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
-                            Drop<span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">course1</a></li>
-                                <li><a href="#">course2</a></li>
-                                <li><a href="#">course3</a></li>
-                            </ul>
-                        </div>
-                        // Show all courses added to course cart
-                        <div>
-                            <button class="btn btn-md btn-success" type="Submit">Enroll</button>
-                        </div>
-                </div>
-            </div>
-        </div>
+
+        <table class="table table-striped">
+            <tr>
+                <th>Courses taken for current semester</th> <th> </th>
+            </tr>
+            <tr th:each="course : ${courses}">
+
+
+                <td th:text="${course}">
+                </td>
+                <td>  <a th:href="@{/student/drop/{course}(course=${course})}"><span>drop</span></a>
+                </td>
+
+                <!--<form  th:action="@{/student/drop/}" method="post" th:object="${stringRequest}">-->
+                    <!--<button class="btn btn-md btn-success" type="Submit"  th:="*{course}">drop</button>-->
+                <!--</form>-->
+            </tr>
+
+        </table>
+
+        <table class="table table-striped">
+            <tr>
+                <th>Courses you may want to add</th> <th> </th>
+            </tr>
+            <!--<tr th:each="course,c : ${coursesToAdd},${coursesToAddFull}">-->
+            <tr th:each="index : ${#numbers.sequence( 0, #arrays.length(coursesToAdd)-1)}">
+
+                <td th:text="${coursesToAddFull[index]}">
+                </td>
+                <td>  <a th:href="@{/student/enroll/{course}(course=${coursesToAdd[index]})}"><span>add</span></a>
+                </td>
+            </tr>
+
+        </table>
+        <p th:utext="${message}"></p>
+
     </div>
 </body>
 </html>

@@ -14,17 +14,17 @@ public class Teacher extends User {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_coursehistory", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "coursehistory_id"))
-    private Set<CourseHistory> courseHistory;
+    private Set<Course> courseHistory;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_course", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
     private Set<Course>  coursesForCurrentSemester;
 
 
-    public Set<CourseHistory> getCourseHistory() {
+    public Set<Course> getCourseHistory() {
         return courseHistory;
     }
 
-    public void setCourseHistory(Set<CourseHistory> courseHistory) {
+    public void setCourseHistory(Set<Course> courseHistory) {
         this.courseHistory = courseHistory;
     }
 
