@@ -20,20 +20,51 @@
                 <div class="panel-heading">Student Enrollment</span>
                 </div>
                 <div class="panel-body">
-                    <h3>Student ID:</h3>
-                    <div class="col-xs-2">
-                        <input class="form-control" type="text">
-                    </div>
-                    <h3><br>Course Name:</h3>
-                    <div class="col-xs-2">
-                        <input class="form-control" type="text">
-                    </div>
-                    <div>
-                        <button class="btn btn-md btn-success" type="Submit">Enroll</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+                    <h3>Student Email:</h3>
+                    <form  th:action="@{/admin/enroll}" method="post" th:object="${studentEmailRequest}">
+                        <div class="col-xs-2">
+                            <input class="form-control" type="text" th:field="*{studentEmail}">
+                        </div>
+                        <div>
+                            <button class="btn btn-md btn-success" type="Submit">Search</button>
+
+                        </div>
+                        <div>
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>Courses taken for current semester</th> <th> </th>
+                                </tr>
+                                <tr th:each="course : ${courses}">
+
+                                    <td th:text="${course}">
+                                    </td>
+                                    <td>  <a th:href="@{/student/drop/{course}(course=${course})}"><span>drop</span></a>
+                                    </td>
+
+                                </tr>
+
+                            </table>
+
+                            <table class="table table-striped">
+                                 <tr>
+                                     <th>Courses you may want to add</th> <th> </th>
+                                 </tr>
+                                 <tr th:each="index : ${#numbers.sequence( 0, #arrays.length(coursesToAdd)-1)}">
+
+                                     <td th:text="${coursesToAddFull[index]}">
+                                     </td>
+                                     <td>  <a th:href="@{/admin/enroll/{course}(course=${coursesToAdd[index]})}"><span>add</span></a>
+                                     </td>
+                                 </tr>
+
+                             </table>
+
+                             <p th:utext="${message}"></p>
+                         </div>
+                    </form>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </body>
+ </html>
