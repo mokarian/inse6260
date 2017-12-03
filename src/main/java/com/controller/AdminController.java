@@ -1,7 +1,6 @@
 package com.controller;
 
 import com.model.User;
-import com.model.request.CourseIdRequest;
 import com.model.request.StudentEmailRequest;
 import com.model.sc.Course;
 import com.model.sc.Student;
@@ -98,10 +97,9 @@ public class AdminController {
     }
 
     @RequestMapping(value = "admin/foundstudentenroll", method = RequestMethod.POST)
-    public ModelAndView adminFoundStudentEnrollPost(Student student, CourseIdRequest courseIdRequest) {
+    public ModelAndView adminFoundStudentEnrollPost(Student student) {
         ModelAndView modelAndView = new ModelAndView();
         String courseId = "";
-        courseId = courseIdRequest.getCourseId();
         String message = "";
 
         String name = student.getName() +" " +student.getLastName();
