@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Administrator Center</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <form th:action="@{/admin/home}" method="get">
+            <button class="btn btn-md btn-warning btn-block" type="Submit">Go To Home Page</button>
+        </form>
+
+        <div class="panel-group" style="margin-top:40px">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Student Enrollment</span>
+                </div>
+                <div class="panel-body">
+                    <form  th:action="@{/admin/foundstudentenroll}" method="get" th:object="${studentName}">
+                        <h3 th:utext="${studentName}"></h3>
+                    </form>
+                    <div>
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Courses taken for current semester</th> <th> </th>
+                            </tr>
+                            <tr th:each="course : ${courses}">
+
+                                <td th:text="${course}"></td>
+                                    <td>
+                                        <a th:href="@{/admin/drop/{course}(course=${course})}"><span>drop</span></a>
+                                    </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Courses they may want to add</th> <th> </th>
+                            </tr>
+                            <tr th:each="index : ${#numbers.sequence( 0, #arrays.length(coursesToAdd)-1)}">
+
+                                <td th:text="${coursesToAddFull[index]}"></td>
+                                    <td>
+                                        <a th:href="@{/admin/foundstudentenroll/{course}(course=${coursesToAdd[index]})}"><span>add</span></a>
+                                    </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <p th:utext="${message}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

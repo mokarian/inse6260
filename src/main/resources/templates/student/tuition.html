@@ -53,15 +53,15 @@
                         <div class="form-group row">
                             <div class="col-xs-3">
                                 <label for="ex1">Card Number</label>
-                                <input class="form-control" id="ex1" type="text">
+                                <input class="form-control" id="ex1" type="text" th:field="*{cardNum}">
                             </div>
                             <div class="col-xs-1">
                             <label for="ex2">MM/YY</label>
-                            <input class="form-control" id="ex2" type="text">
+                            <input class="form-control" id="ex2" type="text" th:field="*{date}">
                             </div>
                             <div class="col-xs-1">
                                 <label for="ex3">CVV</label>
-                                <input class="form-control" id="ex3" type="text">
+                                <input class="form-control" id="ex3" type="text" th:field="*{cvv}">
                             </div>
                         </div>
                         <div>

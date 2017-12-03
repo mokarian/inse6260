@@ -13,5 +13,4 @@ import org.springframework.stereotype.Repository;
 @Qualifier("studentRepo")
 public interface StudentRepository  extends JpaRepository<Student, Integer> {
     Student findByEmail(String email);
-
 }
