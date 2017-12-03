@@ -21,7 +21,7 @@
                 <div class="panel-heading">Student Enrollment</span>
                 </div>
                 <div class="panel-body">
-                    <form  th:action="@{/admin/enrollsuccess}" method="get" th:object="${studentName}">
+                    <form  th:action="@{/admin/foundstudentenroll}" method="get" th:object="${studentName}">
                         <h3 th:utext="${studentName}"></h3>
                     </form>
                     <div>
@@ -46,7 +46,7 @@
 
                                 <td th:text="${coursesToAddFull[index]}"></td>
                                     <td>
-                                        <a th:href="@{/admin/enrollsuccess/{course}(course=${coursesToAdd[index]})}"><span>add</span></a>
+                                        <a th:href="@{/admin/foundstudentenroll/{course}(course=${coursesToAdd[index]})}"><span>add</span></a>
                                     </td>
                             </tr>
                         </table>

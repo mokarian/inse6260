@@ -64,15 +64,15 @@ public class AdminController {
 
         try {
             Student student = studentService.findByEmail(email);
-            return adminEnrollSuccess(student);
+            return adminFoundStudentEnroll(student);
         } catch (NullPointerException e) {
             e.getMessage();
             return modelAndView;
         }
     }
 
-    @RequestMapping(value = "admin/enrollsuccess}", method = RequestMethod.GET)
-    public ModelAndView adminEnrollSuccess(Student student) {
+    @RequestMapping(value = "admin/foundstudentenroll}", method = RequestMethod.GET)
+    public ModelAndView adminFoundStudentEnroll(Student student) {
         ModelAndView modelAndView = new ModelAndView();
 
         String name = student.getName() +" " +student.getLastName();
@@ -93,12 +93,12 @@ public class AdminController {
         modelAndView.addObject("coursesToAdd", listOfCoursesOffered);
         modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
 
-        modelAndView.setViewName("admin/enrollsuccess");
+        modelAndView.setViewName("admin/foundstudentenroll");
         return modelAndView;
     }
 
-    @RequestMapping(value = "admin/enrollsuccess", method = RequestMethod.POST)
-    public ModelAndView adminEnrollSuccessPost(Student student, CourseIdRequest courseIdRequest) {
+    @RequestMapping(value = "admin/foundstudentenroll", method = RequestMethod.POST)
+    public ModelAndView adminFoundStudentEnrollPost(Student student, CourseIdRequest courseIdRequest) {
         ModelAndView modelAndView = new ModelAndView();
         String courseId = "";
         courseId = courseIdRequest.getCourseId();
@@ -119,7 +119,7 @@ public class AdminController {
         }
 
         modelAndView.addObject("message", message);
-        modelAndView.setViewName("admin/enrollsuccess");
+        modelAndView.setViewName("admin/foundstudentenroll");
         return modelAndView;
     }
 
