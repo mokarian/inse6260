@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by freyja.jokulsdottir on 9/21/2017.
@@ -30,6 +28,9 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private StudentService studentService;
+
+    private Student student;
+
     @RequestMapping(value = "admin/home", method = RequestMethod.GET)
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView();
@@ -46,9 +47,6 @@ public class AdminController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("studentEmailRequest", new StudentEmailRequest());
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(auth.getName());
-
         modelAndView.setViewName("admin/enroll");
         return modelAndView;
     }
@@ -62,25 +60,25 @@ public class AdminController {
         email = emailRequest.getStudentEmail();
 
         try {
-            Student student = studentService.findByEmail(email);
-            return adminFoundStudentEnroll(student);
+            this.student = studentService.findByEmail(email);
+            return adminFoundStudentEnroll();
         } catch (NullPointerException e) {
             e.getMessage();
             return modelAndView;
         }
     }
 
-    @RequestMapping(value = "admin/foundstudentenroll}", method = RequestMethod.GET)
-    public ModelAndView adminFoundStudentEnroll(Student student) {
+    @RequestMapping(value = "admin/foundstudentenroll/{courseId}", method = RequestMethod.GET)
+    public ModelAndView adminFoundStudentEnroll() {
         ModelAndView modelAndView = new ModelAndView();
 
-        String name = student.getName() +" " +student.getLastName();
+        String name = this.student.getName() +" " +this.student.getLastName();
         modelAndView.addObject("studentName", name);
 
         List<String> list = new ArrayList<>();
 
         List<Course> listOfCourses = new ArrayList<>();
-        listOfCourses.addAll(student.getCoursesForCurrentSemester());
+        listOfCourses.addAll(this.student.getCoursesForCurrentSemester());
         for (Course course : listOfCourses) {
             list.add(course.getCourseName());
         }
@@ -96,27 +94,82 @@ public class AdminController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "admin/foundstudentenroll", method = RequestMethod.POST)
-    public ModelAndView adminFoundStudentEnrollPost(Student student) {
+    @RequestMapping(value = "admin/add/{courseId}", method = RequestMethod.GET)
+    public ModelAndView adminAdd(@PathVariable String courseId) {
         ModelAndView modelAndView = new ModelAndView();
-        String courseId = "";
-        String message = "";
 
-        String name = student.getName() +" " +student.getLastName();
+        String name = this.student.getName() +" " +this.student.getLastName();
+        modelAndView.addObject("studentName", name);
+
+        String message = "";
 
         if(!courseId.equals("")) {
             List<Course> courses = studentService.getCoursesOfferedThisSemester();
 
             for (Course course : courses) {
-                if (course.getCourseName().equalsIgnoreCase(courseId) && noConflictsDetected(student.getCoursesForCurrentSemester(), course)) {
-                    student.getCoursesForCurrentSemester().add(course);
-                    studentService.saveStudent(student);
+                if (course.getCourseName().equalsIgnoreCase(courseId) && noConflictsDetected(this.student.getCoursesForCurrentSemester(), course)) {
+                    this.student.getCoursesForCurrentSemester().add(course);
+                    studentService.saveStudent(this.student);
                     message = courseId + " added to " + name + "'s courses successfully";
                 }
             }
         }
 
         modelAndView.addObject("message", message);
+
+        List<String> list = new ArrayList<>();
+
+        List<Course> listOfCourses = new ArrayList<>();
+        listOfCourses.addAll(this.student.getCoursesForCurrentSemester());
+        for (Course course : listOfCourses) {
+            list.add(course.getCourseName());
+        }
+        modelAndView.addObject("courses", list);
+
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+
+        modelAndView.addObject("coursesToAdd", listOfCoursesOffered);
+        modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
+
+        modelAndView.setViewName("admin/foundstudentenroll");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "admin/drop/{courseId}", method = RequestMethod.GET)
+    public ModelAndView adminDrop(@PathVariable String courseId) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        String message = "";
+        List<Course> courseListIterator = new ArrayList();
+        courseListIterator.addAll(this.student.getCoursesForCurrentSemester());
+        ListIterator<Course> iterator = courseListIterator.listIterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().getCourseName().equalsIgnoreCase(courseId)) {
+                iterator.remove();
+                this.student.setCoursesForCurrentSemester(new HashSet<>(courseListIterator));
+                studentService.saveStudent(this.student);
+                message = "course(" + courseId + ") dropped successfully ";
+                break;
+            } else {
+                message = "course(" + courseId + ") was not found in the list of courses ";
+            }
+        }
+
+        List<String> list = new ArrayList<>();
+        for (Course course : courseListIterator) {
+            list.add(course.getCourseName());
+        }
+
+        modelAndView.addObject("courses", list);
+
+        modelAndView.addObject("message", message);
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+
+        modelAndView.addObject("coursesToAdd", listOfCoursesOffered);
+        modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
+
         modelAndView.setViewName("admin/foundstudentenroll");
         return modelAndView;
     }
