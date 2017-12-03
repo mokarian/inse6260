@@ -113,8 +113,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         roleRepository.save(professor);
         storeUserToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 1);
         storeStudentToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 1);
-//        storeUserToDatabase("Freyja", "Jökulsdóttir", "freyjaj@concordia.ca", STUDENT, 2);
-//        storeStudentToDatabase("Freyja", "Jökulsdóttir", "freyjaj@concordia.ca", STUDENT, 2);
+//        storeUserToDatabase("Freyja", "Jökulsdóttir", "freyja@concordia.ca", STUDENT, 2);
+//        storeStudentToDatabase("Freyja", "Jökulsdóttir", "freyja@concordia.ca", STUDENT, 2);
         storeUserToDatabase("rachida", "dssouli", "rachida.dssouli@concordia.ca", TEACHER, 3);
         storeUserToDatabase("Salvatore", "Colavita", "Salvatore.Colavita@concordia.ca", ADMIN, 4);
         createCoursesOfferedThisSemesetr();

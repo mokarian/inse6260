@@ -1,8 +1,8 @@
 package com.controller;
 
 import com.model.User;
+import com.model.request.CourseIdRequest;
 import com.model.request.StudentEmailRequest;
-import com.model.request.TuitionRequest;
 import com.model.sc.Course;
 import com.model.sc.Student;
 import com.service.UserService;
@@ -14,23 +14,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
- * Created by maysam.mokarian on 9/21/2017.
+ * Created by freyja.jokulsdottir on 9/21/2017.
  */
 @Controller
 public class AdminController {
-
 
     @Autowired
     private UserService userService;
     @Autowired
     private StudentService studentService;
-    @RequestMapping(value = "/admin/home", method = RequestMethod.GET)
+    @RequestMapping(value = "admin/home", method = RequestMethod.GET)
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -41,7 +42,7 @@ public class AdminController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/admin/enroll", method = RequestMethod.GET)
+    @RequestMapping(value = "admin/enroll", method = RequestMethod.GET)
     public ModelAndView adminEnroll() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("studentEmailRequest", new StudentEmailRequest());
@@ -53,16 +54,29 @@ public class AdminController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/admin/enroll", method = RequestMethod.POST)
+    @RequestMapping(value = "admin/enroll", method = RequestMethod.POST)
     public ModelAndView adminEnrollPost(StudentEmailRequest emailRequest) {
         ModelAndView modelAndView = new ModelAndView();
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(auth.getName());
+        modelAndView.setViewName("admin/enroll");
 
         String email ="";
         email = emailRequest.getStudentEmail();
-        Student student = studentService.findByEmail(email);
+
+        try {
+            Student student = studentService.findByEmail(email);
+            return adminEnrollSuccess(student);
+        } catch (NullPointerException e) {
+            e.getMessage();
+            return modelAndView;
+        }
+    }
+
+    @RequestMapping(value = "admin/enrollsuccess}", method = RequestMethod.GET)
+    public ModelAndView adminEnrollSuccess(Student student) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        String name = student.getName() +" " +student.getLastName();
+        modelAndView.addObject("studentName", name);
 
         List<String> list = new ArrayList<>();
 
@@ -72,14 +86,40 @@ public class AdminController {
             list.add(course.getCourseName());
         }
         modelAndView.addObject("courses", list);
+
         List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
         List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
 
         modelAndView.addObject("coursesToAdd", listOfCoursesOffered);
         modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
 
-        modelAndView.setViewName("admin/enroll");
+        modelAndView.setViewName("admin/enrollsuccess");
+        return modelAndView;
+    }
 
+    @RequestMapping(value = "admin/enrollsuccess", method = RequestMethod.POST)
+    public ModelAndView adminEnrollSuccessPost(Student student, CourseIdRequest courseIdRequest) {
+        ModelAndView modelAndView = new ModelAndView();
+        String courseId = "";
+        courseId = courseIdRequest.getCourseId();
+        String message = "";
+
+        String name = student.getName() +" " +student.getLastName();
+
+        if(!courseId.equals("")) {
+            List<Course> courses = studentService.getCoursesOfferedThisSemester();
+
+            for (Course course : courses) {
+                if (course.getCourseName().equalsIgnoreCase(courseId) && noConflictsDetected(student.getCoursesForCurrentSemester(), course)) {
+                    student.getCoursesForCurrentSemester().add(course);
+                    studentService.saveStudent(student);
+                    message = courseId + " added to " + name + "'s courses successfully";
+                }
+            }
+        }
+
+        modelAndView.addObject("message", message);
+        modelAndView.setViewName("admin/enrollsuccess");
         return modelAndView;
     }
 
@@ -89,5 +129,15 @@ public class AdminController {
             courses.add(course.getCourseName());
         }
         return courses;
+    }
+
+    private boolean noConflictsDetected(Set<Course> coursesForCurrentSemester, Course course) {
+        List<Course> courses = new ArrayList<>(coursesForCurrentSemester);
+        for(Course c:courses){
+            if(c.getSchedules().contains(course.getSchedules())){
+                return false;
+            }
+        }
+        return true;
     }
 }
