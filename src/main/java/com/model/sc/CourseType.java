@@ -6,5 +6,6 @@ package com.model.sc;
 public enum CourseType {
     LECTURE,
     TUTORIAL,
-    LAB
+    LAB,
+    SECTION
 }

@@ -3,7 +3,9 @@ package com.controller;
 import com.model.User;
 import com.model.request.StudentEmailRequest;
 import com.model.sc.Course;
+import com.model.sc.CourseType;
 import com.model.sc.Student;
+import com.model.sc.TimeLine;
 import com.service.UserService;
 import com.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,5 +192,90 @@ public class AdminController {
             }
         }
         return true;
+    }
+
+    @RequestMapping(value = "admin/modifycoursesection", method = RequestMethod.GET)
+    public ModelAndView adminModifyCourseSection() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+
+        modelAndView.addObject("coursesToModify", listOfCoursesOffered);
+        modelAndView.addObject("coursesToModifyFull", listOfCoursesOfferedFull);
+
+        modelAndView.setViewName("admin/modifycoursesection");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "admin/modifycoursesection/add/{courseId}", method = RequestMethod.GET)
+    public ModelAndView adminAddCourseSection(@PathVariable String courseId) {
+        ModelAndView modelAndView = new ModelAndView();
+        String message = "";
+
+        List<Course> courseListIterator = new ArrayList();
+        courseListIterator.addAll(studentService.getCoursesOfferedThisSemester());
+        ListIterator<Course> iterator = courseListIterator.listIterator();
+        while (iterator.hasNext()) {
+            Course course = iterator.next();
+            String name = course.getCourseName();
+            if (name.equalsIgnoreCase(courseId)) {
+                Course courseSection = course;
+                courseSection.setSection(course.getSection() + 1);
+                iterator.add(courseSection);
+                message = "course(" + courseId + ") section added successfully ";
+                break;
+            } else {
+                message = "course(" + courseId + ") was not found in the list of courses ";
+            }
+        }
+
+        List<String> list = new ArrayList<>();
+        for (Course course : courseListIterator) {
+            list.add(course.getCourseName());
+        }
+
+        modelAndView.addObject("message", message);
+
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+
+        modelAndView.addObject("coursesToModify", list);
+        modelAndView.addObject("coursesToModifyFull", courseListIterator);
+
+        modelAndView.setViewName("admin/modifycoursesection");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "admin/modifycoursesection/remove/{courseId}", method = RequestMethod.GET)
+    public ModelAndView adminRemoveCourseSection(@PathVariable String courseId) {
+        ModelAndView modelAndView = new ModelAndView();
+        String message = "";
+
+        List<Course> courseListIterator = new ArrayList();
+        courseListIterator.addAll(studentService.getCoursesOfferedThisSemester());
+        ListIterator<Course> iterator = courseListIterator.listIterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().getCourseName().equalsIgnoreCase(courseId)) {
+                iterator.remove();
+                message = "course(" + courseId + ") section removed successfully ";
+                break;
+            } else {
+                message = "course(" + courseId + ") was not found in the list of courses ";
+            }
+        }
+
+        List<String> list = new ArrayList<>();
+        for (Course course : courseListIterator) {
+            list.add(course.getCourseName());
+        }
+
+        modelAndView.addObject("message", message);
+
+        modelAndView.addObject("coursesToModify", list);
+        modelAndView.addObject("coursesToModifyFull", courseListIterator);
+
+        modelAndView.setViewName("admin/modifycoursesection");
+        return modelAndView;
     }
 }
