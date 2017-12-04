@@ -28,4 +28,16 @@ public class TuitionRequest {
     public String getCvv() {
         return cvv;
     }
+
+    public void setCardNum(String cardNum) {
+        this.cardNum = cardNum;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setCvv(String cvv) {
+        this.cvv = cvv;
+    }
 }
