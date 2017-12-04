@@ -219,6 +219,8 @@ public class StudentController {
             message = "the amount entered is more than your tuition fee";
         } else if (user.getTuition().subtract(new BigDecimal(stringRequest.getAmount())).signum() == +1) {
             message = "the amount entered is not enough";
+            user.setTuition(user.getTuition().subtract(new BigDecimal(stringRequest.getAmount())));
+            studentService.saveStudent(user);
         } else {
             user.setTuition(new BigDecimal(0));
             studentService.saveStudent(user);
