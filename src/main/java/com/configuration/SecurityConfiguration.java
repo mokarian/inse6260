@@ -6,10 +6,7 @@ import javax.sql.DataSource;
 import com.model.Role;
 import com.model.User;
 import com.model.sc.*;
-import com.repository.CourseRepository;
-import com.repository.RoleRepository;
-import com.repository.StudentRepository;
-import com.repository.UserRepository;
+import com.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -22,9 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Configuration
 @EnableWebSecurity
@@ -50,6 +45,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private TeacherRepository teacherRepository;
 
     @Value("${spring.queries.users-query}")
     private String usersQuery;
@@ -112,10 +110,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         roleRepository.save(student);
         roleRepository.save(professor);
         storeUserToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 1);
-        storeStudentToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 1);
+
 //        storeUserToDatabase("freyjaj", "Jökulsdóttir", "freyjaj@concordia.ca", STUDENT, 2);
 //        storeStudentToDatabase("freyjaj", "Jökulsdóttir", "freyjaj@concordia.ca", STUDENT, 2);
-        storeUserToDatabase("rachida", "dssouli", "rachida.dssouli@concordia.ca", TEACHER, 3);
+     //   storeUserToDatabase("rachida", "dssouli", "rachida.dssouli@concordia.ca", TEACHER, 3);
+        storeTeacherToDatabase("rachida", "dssouli", "rachida.dssouli@concordia.ca", TEACHER, 3);
         storeUserToDatabase("Salvatore", "Colavita", "Salvatore.Colavita@concordia.ca", ADMIN, 4);
         createCoursesOfferedThisSemesetr();
     }
@@ -133,7 +132,48 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         userRepository.save(user);
     }
 
-    public void storeStudentToDatabase(String firstName, String lastName, String email, String role, int i) {
+    public void storeTeacherToDatabase(String firstName, String lastName, String email, String role, int i) {
+        Teacher teacher = new Teacher();
+        teacher.setName(firstName);
+        teacher.setUser_id(i);
+        teacher.setLastName(lastName);
+        teacher.setEmail(email);
+        teacher.setPassword(bCryptPasswordEncoder.encode("123456"));
+        teacher.setActive(1);
+        Role userRole = roleRepository.findByRole(role);
+        teacher.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+        teacher.setCoursesForCurrentSemester(getCourses());
+        teacher.setStudents(createStudents());
+        teacherRepository.save(teacher);
+    }
+
+    private Set<Student> createStudents() {
+        Set<Student> students = new HashSet<>();
+        Student student1 = storeStudentToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 1);
+//        Student student2 = storeStudentToDatabase("Freyja", "Jökulsdóttir", "freyja@concordia.ca", STUDENT, 1);
+//        Student student3 = storeStudentToDatabase("Parisa", "Nikzad", "parisa@concordia.ca", STUDENT, 1);
+//        Student student4 = storeStudentToDatabase("Rana", "Jyotsna ", "rana@concordia.ca", STUDENT, 1);
+//        Student student5 = storeStudentToDatabase("Robert", "Deniro ", "alex@concordia.ca", STUDENT, 1);
+//        Student student6 = storeStudentToDatabase("Lana", "DelRey ", "lana@concordia.ca", STUDENT, 1);
+//        Student student7 = storeStudentToDatabase("Jonathan", "BonJovi ", "jonathan@concordia.ca", STUDENT, 1);
+//        Student student8 = storeStudentToDatabase("Micheal", "Jackson ", "micheal@concordia.ca", STUDENT, 1);
+//        Student student9 = storeStudentToDatabase("George", "Michael", "george@concordia.ca", STUDENT, 1);
+//        Student student10 = storeStudentToDatabase("Ed", "Sheeran ", "ed@concordia.ca", STUDENT, 1);
+
+        students.add(student1);
+//        students.add(student2);
+//        students.add(student3);
+//        students.add(student4);
+//        students.add(student5);
+//        students.add(student6);
+//        students.add(student7);
+//        students.add(student8);
+//        students.add(student9);
+//        students.add(student10);
+        return students;
+    }
+
+    public Student storeStudentToDatabase(String firstName, String lastName, String email, String role, int i) {
         Student student = new Student();
         student.setName(firstName);
         student.setUser_id(i);
@@ -149,6 +189,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         student.setPhone("(514)226-0101");
         student.setTuition(new BigDecimal(2300));
         studentRepository.save(student);
+        return student;
     }
 
     private Set<Course> getCourses() {

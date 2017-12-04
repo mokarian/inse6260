@@ -1,7 +1,9 @@
 package com.controller;
 
 import com.model.User;
-import com.service.UserService;
+import com.model.sc.Student;
+import com.model.sc.Teacher;
+import com.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,12 +18,12 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ProfessorController {
     @Autowired
-    private UserService userService;
+    private TeacherService teacherService;
     @RequestMapping(value = "/professor/home", method = RequestMethod.GET)
     public ModelAndView professorHome() {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(auth.getName());
+        User user = teacherService.findByEmail(auth.getName());
         modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
         modelAndView.addObject("professorMessage", "Content Available Only for Users with Professor Role");
         modelAndView.setViewName("professor/home");
@@ -30,7 +32,8 @@ public class ProfessorController {
 
     @RequestMapping(value = "/professor/grades", method = RequestMethod.GET)
     public ModelAndView professorGrades() {
-        ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Teacher teacher = teacherService.findByEmail(auth.getName());        ModelAndView modelAndView = new ModelAndView();
 
         return modelAndView;
     }
