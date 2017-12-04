@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.*;
 
 /**
+ * A admin/advisor controller
  *
  * @author Freyja Jokulsdottir
  * @version 1.0

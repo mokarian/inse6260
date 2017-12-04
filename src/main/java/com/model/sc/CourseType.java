@@ -1,7 +1,11 @@
 package com.model.sc;
 
 /**
- * Created by maysam.mokarian on 11/13/2017.
+ * A Course type enum
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 13.11.2017
  */
 public enum CourseType {
     LECTURE,

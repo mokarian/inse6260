@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Created by maysam.mokarian on 9/21/2017.
+ * A professor controller
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 21.09.2017
  */
 @Controller
 public class ProfessorController {

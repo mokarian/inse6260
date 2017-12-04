@@ -18,6 +18,13 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Transient;
 
+/**
+ * A user object for student/teacher/advisor
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 24.10.2017
+ */
 @Entity
 @Table(name = "user")
 public class User {

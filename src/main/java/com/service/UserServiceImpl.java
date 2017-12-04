@@ -12,6 +12,13 @@ import org.springframework.stereotype.Service;
 
 import com.model.Role;
 
+/**
+ * A service implementation class for user
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 30.10.2017
+ */
 @Service("userService")
 public class UserServiceImpl implements UserService{
 

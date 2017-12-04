@@ -26,6 +26,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A security configuration
+ *
+ * @author Maysam Mokarian
+ * @version 2.0
+ * @since 24.10.2017
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {

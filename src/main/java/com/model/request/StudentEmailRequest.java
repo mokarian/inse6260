@@ -1,6 +1,7 @@
 package com.model.request;
 
 /**
+ * A student email request
  *
  * @author Freyja Jokulsdottir
  * @version 1.0

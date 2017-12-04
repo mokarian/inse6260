@@ -1,7 +1,11 @@
 package com.model.sc;
 
 /**
- * Created by maysam.mokarian on 10/24/2017.
+ * A timeline enum for the courses and schedule.
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 24.10.2017
  */
 public enum  TimeLine {
     MONDAY_9AM_TO_12PM,
