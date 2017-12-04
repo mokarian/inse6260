@@ -1,7 +1,10 @@
 package com.model.request;
 
 /**
- * Created by freyja.jokulsdottir on 12/03/2017.
+ *
+ * @author Freyja Jokulsdottir
+ * @version 1.0
+ * @since 03.12.2017
  */
 public class StudentEmailRequest {
     String studentEmail;

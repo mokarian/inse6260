@@ -3,9 +3,7 @@ package com.controller;
 import com.model.User;
 import com.model.request.StudentEmailRequest;
 import com.model.sc.Course;
-import com.model.sc.CourseType;
 import com.model.sc.Student;
-import com.model.sc.TimeLine;
 import com.service.UserService;
 import com.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +13,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
 
 /**
- * Created by freyja.jokulsdottir on 9/21/2017.
+ *
+ * @author Freyja Jokulsdottir
+ * @version 1.0
+ * @since 03.12.2017
  */
 @Controller
 public class AdminController {
