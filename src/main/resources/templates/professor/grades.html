@@ -12,59 +12,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Professor Center</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <form th:action="@{/professor/home}" method="get">
-            <button class="btn btn-md btn-warning btn-block" type="Submit">Go To Home Page</button>
+<div class="container">
+    <form th:action="@{/professor/home}" method="get">
+        <button class="btn btn-md btn-warning btn-block" type="Submit">Go To Home Page</button>
+    </form>
+    <!--<form  th:action="@{/professor/grades}" method="post" th:object="${gradeRequest}">-->
+    <!--<div class="col-xs-2">-->
+    <!--<label for="ex1">Amount to Pay</label>-->
+    <!--<input class="form-control" id="ex1" type="text"  th:field="*{amount}">-->
+    <!--</div>-->
+    <table class="table table-striped" th:with="gradeList=${gradeList}">
+        <tr>
+            <th>List of students / courses</th>
+            <th>Contact Information</th>
+        </tr>
+        <form th:action="@{/professor/grades}" method="post" th:object="${gradeRequest}">
+            <tr th:each="request : ${gradeList.gradeRequests}">
+                <!--<td th:text="${student.email}"></td>-->
+                <!--<span th:each="course : ${gradeRequest.course}">-->
+                <td th:text="${request.studentEmail}">
+                <td th:text="${request.contactInfo}">
+                <td th:text="${request.course}">
+                <td th:text="${request.grade}">
+                <td>
+
+                    <!--style="display: none;"-->
+                    <input class="form-control" type="text" th:field="*{grade}">
+
+                    <!--<input  class="form-control" type="text" th:field="*{request.contactInfo}">-->
+                    <!--<input  class="form-control" type="text" th:field="*{request.course}" >-->
+                    <button class="btn btn-primary btn-md btn-success" type="submit">Change</button>
+                </td>
+            </tr>
         </form>
-        <div class="panel-group" style="margin-top:40px">
-            <div class="panel panel-primary">
-                <div class="panel-heading">Student Grades</span>
-                </div>
-                <div class="panel-body">
-                    // select a course for uploading grades
-                    <div class="dropdown">
-                        <button class="btn btn-md btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                            Course<span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">course1</a></li>
-                            <li><a href="#">course2</a></li>
-                            <li><a href="#">course3</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h2>Course:</h2>
-                        <table class="table table-bordered table-condensed table-responsive">
-                            <thead>
-                            <tr>
-                                <th>Student ID</th>
-                                <th>Grade</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td></td>
-                                <td class="col-xs-2">
-                                    <input class="form-control" type="text">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td class="col-xs-2">
-                                    <input class="form-control" type="text">
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+    </table>
+</div>
 </body>
 </html>
