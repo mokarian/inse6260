@@ -19,7 +19,11 @@ import java.math.BigDecimal;
 import java.util.*;
 
 /**
- * Created by maysam.mokarian on 9/21/2017.
+ * A student controller
+ *
+ * @author Maysam Mokarian
+ * @version 2.0
+ * @since 21.09.2017
  */
 @Controller
 public class StudentController {

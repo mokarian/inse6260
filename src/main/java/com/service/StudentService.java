@@ -1,7 +1,5 @@
 package com.service;
 
-import com.model.Role;
-import com.model.User;
 import com.model.sc.Course;
 import com.model.sc.Student;
 import com.repository.CourseRepository;
@@ -13,7 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * Created by maysam.mokarian on 10/30/2017.
+ * A service class for student
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 30.10.2017
  */
 @Service
 public class StudentService {

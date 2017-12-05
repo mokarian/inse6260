@@ -1,7 +1,11 @@
 package com.model.request;
 
 /**
- * Created by maysam.mokarian on 11/13/2017.
+ * A student's tuition request
+ *
+ * @author Maysam Mokarian
+ * @version 2.0
+ * @since 13.11.2017
  */
 public class TuitionRequest {
     String amount;

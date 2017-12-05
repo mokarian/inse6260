@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.*;
 
 /**
+ * A admin/advisor controller
  *
  * @author Freyja Jokulsdottir
  * @version 1.0
@@ -32,6 +33,7 @@ public class AdminController {
     private StudentService studentService;
 
     private Student student;
+    private List<Course> courseListIterator = new ArrayList<>();
 
     @RequestMapping(value = "admin/home", method = RequestMethod.GET)
     public ModelAndView home() {
@@ -198,6 +200,8 @@ public class AdminController {
     public ModelAndView adminModifyCourseSection() {
         ModelAndView modelAndView = new ModelAndView();
 
+        this.courseListIterator.addAll(studentService.getCoursesOfferedThisSemester());
+
         List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
         List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
 
@@ -213,15 +217,12 @@ public class AdminController {
         ModelAndView modelAndView = new ModelAndView();
         String message = "";
 
-        List<Course> courseListIterator = new ArrayList();
-        courseListIterator.addAll(studentService.getCoursesOfferedThisSemester());
-        ListIterator<Course> iterator = courseListIterator.listIterator();
+        ListIterator<Course> iterator = this.courseListIterator.listIterator();
         while (iterator.hasNext()) {
             Course course = iterator.next();
             String name = course.getCourseName();
             if (name.equalsIgnoreCase(courseId)) {
                 Course courseSection = course;
-                courseSection.setSection(course.getSection() + 1);
                 iterator.add(courseSection);
                 message = "course(" + courseId + ") section added successfully ";
                 break;
@@ -231,17 +232,14 @@ public class AdminController {
         }
 
         List<String> list = new ArrayList<>();
-        for (Course course : courseListIterator) {
+        for (Course course : this.courseListIterator) {
             list.add(course.getCourseName());
         }
 
         modelAndView.addObject("message", message);
 
-        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
-        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
-
         modelAndView.addObject("coursesToModify", list);
-        modelAndView.addObject("coursesToModifyFull", courseListIterator);
+        modelAndView.addObject("coursesToModifyFull", this.courseListIterator);
 
         modelAndView.setViewName("admin/modifycoursesection");
         return modelAndView;
@@ -252,9 +250,7 @@ public class AdminController {
         ModelAndView modelAndView = new ModelAndView();
         String message = "";
 
-        List<Course> courseListIterator = new ArrayList();
-        courseListIterator.addAll(studentService.getCoursesOfferedThisSemester());
-        ListIterator<Course> iterator = courseListIterator.listIterator();
+        ListIterator<Course> iterator = this.courseListIterator.listIterator();
         while (iterator.hasNext()) {
             if (iterator.next().getCourseName().equalsIgnoreCase(courseId)) {
                 iterator.remove();
@@ -266,14 +262,14 @@ public class AdminController {
         }
 
         List<String> list = new ArrayList<>();
-        for (Course course : courseListIterator) {
+        for (Course course : this.courseListIterator) {
             list.add(course.getCourseName());
         }
 
         modelAndView.addObject("message", message);
 
         modelAndView.addObject("coursesToModify", list);
-        modelAndView.addObject("coursesToModifyFull", courseListIterator);
+        modelAndView.addObject("coursesToModifyFull", this.courseListIterator);
 
         modelAndView.setViewName("admin/modifycoursesection");
         return modelAndView;
