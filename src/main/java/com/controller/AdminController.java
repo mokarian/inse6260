@@ -238,9 +238,6 @@ public class AdminController {
 
         modelAndView.addObject("message", message);
 
-        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
-        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
-
         modelAndView.addObject("coursesToModify", list);
         modelAndView.addObject("coursesToModifyFull", this.courseListIterator);
 
