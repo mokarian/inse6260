@@ -26,6 +26,19 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">Contact Information</div>
                 <div class="panel-body">
+                    <table class="table table-striped" th:with="gradeList=${gradeList}">
+                        <tr>
+                            <th>Student Email</th>
+                            <th>Contact Information</th>
+                        </tr>
+                        <form th:action="@{/professor/contactinfo}" method="post" th:object="${gradeRequest}">
+                            <tr th:each="request : ${gradeList.gradeRequests}">
+                                <td th:text="${request.studentEmail}">
+                                <td th:text="${request.contactInfo}">
+                                </td>
+                            </tr>
+                        </form>
+                    </table>
                 </div>
             </div>
         </div>
