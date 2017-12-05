@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.hibernate.cfg.AvailableSettings.USER;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -111,12 +113,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         roleRepository.save(admin);
         roleRepository.save(student);
         roleRepository.save(professor);
-        storeUserToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 1);
-        storeStudentToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 1);
+      //  storeStudentToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 1);
+    //    storeUserToDatabase("rachida", "dssouli", "rachida.dssouli@concordia.ca", TEACHER, 3);
+        storeTeacherToDatabase("rachida", "dssouli", "rachida.dssouli@concordia.ca", TEACHER, 3);
+
 //        storeUserToDatabase("Freyja", "Jökulsdóttir", "freyja@concordia.ca", STUDENT, 2);
 //        storeStudentToDatabase("Freyja", "Jökulsdóttir", "freyja@concordia.ca", STUDENT, 2);
-        storeUserToDatabase("rachida", "dssouli", "rachida.dssouli@concordia.ca", TEACHER, 3);
-        storeUserToDatabase("Salvatore", "Colavita", "Salvatore.Colavita@concordia.ca", ADMIN, 4);
+   //     storeUserToDatabase("Salvatore", "Colavita", "Salvatore.Colavita@concordia.ca", ADMIN, 4);
         createCoursesOfferedThisSemester();
     }
 
@@ -148,7 +151,27 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         student.setAddress("45 Forden Crescent, Westmount, Quebec H3Y 3H2 Canada");
         student.setPhone("(514)226-0101");
         student.setTuition(new BigDecimal(2300));
-        studentRepository.save(student);
+      //  studentRepository.save(student);
+       // userRepository.save(student);
+        return student;
+    }
+
+
+    public Student storeStudentToDatabase2(String firstName, String lastName, String email, String role, int i) {
+        Student student = new Student();
+        student.setName(firstName);
+        student.setUser_id(i);
+        student.setLastName(lastName);
+        student.setEmail(email);
+        student.setPassword(bCryptPasswordEncoder.encode("123456"));
+        student.setActive(1);
+        student.setCoursesForCurrentSemester(getCourses());
+        student.setCourseHistory(createCourseHistory());
+        student.setAddress("45 Forden Crescent, Westmount, Quebec H3Y 3H2 Canada");
+        student.setPhone("(514)226-0101");
+        student.setTuition(new BigDecimal(2300));
+        //  studentRepository.save(student);
+        // userRepository.save(student);
         return student;
     }
 
@@ -232,31 +255,36 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         teacher.setCoursesForCurrentSemester(getCourses());
         teacher.setStudents(createStudents());
         teacherRepository.save(teacher);
+      //  userRepository.save(teacher);
+
     }
 
     private Set<Student> createStudents() {
         Set<Student> students = new HashSet<>();
-        Student student1 = storeStudentToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 1);
-//        Student student2 = storeStudentToDatabase("Freyja", "Jökulsdóttir", "freyja@concordia.ca", STUDENT, 1);
-//        Student student3 = storeStudentToDatabase("Parisa", "Nikzad", "parisa@concordia.ca", STUDENT, 1);
-//        Student student4 = storeStudentToDatabase("Rana", "Jyotsna ", "rana@concordia.ca", STUDENT, 1);
-//        Student student5 = storeStudentToDatabase("Robert", "Deniro ", "alex@concordia.ca", STUDENT, 1);
-//        Student student6 = storeStudentToDatabase("Lana", "DelRey ", "lana@concordia.ca", STUDENT, 1);
-//        Student student7 = storeStudentToDatabase("Jonathan", "BonJovi ", "jonathan@concordia.ca", STUDENT, 1);
-//        Student student8 = storeStudentToDatabase("Micheal", "Jackson ", "micheal@concordia.ca", STUDENT, 1);
-//        Student student9 = storeStudentToDatabase("George", "Michael", "george@concordia.ca", STUDENT, 1);
-//        Student student10 = storeStudentToDatabase("Ed", "Sheeran ", "ed@concordia.ca", STUDENT, 1);
+        Student student1 = storeStudentToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 11);
+       // storeUserToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 1);
+
+                Student student2 = storeStudentToDatabase2("Freyja", "Jökulsdóttir", "freyja@concordia.ca", STUDENT, 12);
+        Student student3 = storeStudentToDatabase2("Parisa", "Nikzad", "parisa@concordia.ca", STUDENT, 13);
+        Student student4 = storeStudentToDatabase2("Rana", "Jyotsna ", "rana@concordia.ca", STUDENT, 14);
+        Student student5 = storeStudentToDatabase2("Robert", "Deniro ", "alex@concordia.ca", STUDENT, 15);
+        Student student6 = storeStudentToDatabase2("Lana", "DelRey ", "lana@concordia.ca", STUDENT, 16);
+        Student student7 = storeStudentToDatabase2("Jonathan", "BonJovi ", "jonathan@concordia.ca", STUDENT, 17);
+        Student student8 = storeStudentToDatabase2("Micheal", "Jackson ", "micheal@concordia.ca", STUDENT, 18);
+        Student student9 = storeStudentToDatabase2("George", "Michael", "george@concordia.ca", STUDENT, 19);
+        Student student10 = storeStudentToDatabase2("Ed", "Sheeran ", "ed@concordia.ca", STUDENT, 20);
+        storeUserToDatabase("Salvatore", "Colavita", "Salvatore.Colavita@concordia.ca", ADMIN, 4);
 
         students.add(student1);
-//        students.add(student2);
-//        students.add(student3);
-//        students.add(student4);
-//        students.add(student5);
-//        students.add(student6);
-//        students.add(student7);
-//        students.add(student8);
-//        students.add(student9);
-//        students.add(student10);
+        students.add(student2);
+        students.add(student3);
+        students.add(student4);
+        students.add(student5);
+        students.add(student6);
+        students.add(student7);
+        students.add(student8);
+        students.add(student9);
+        students.add(student10);
         return students;
     }
 
