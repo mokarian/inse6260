@@ -119,7 +119,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 //        storeUserToDatabase("Freyja", "Jökulsdóttir", "freyja@concordia.ca", STUDENT, 2);
 //        storeStudentToDatabase("Freyja", "Jökulsdóttir", "freyja@concordia.ca", STUDENT, 2);
-   //     storeUserToDatabase("Salvatore", "Colavita", "Salvatore.Colavita@concordia.ca", ADMIN, 4);
+        storeUserToDatabase("Salvatore", "Colavita", "Salvatore.Colavita@concordia.ca", ADMIN, 4);
         createCoursesOfferedThisSemester();
     }
 
@@ -263,28 +263,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         Set<Student> students = new HashSet<>();
         Student student1 = storeStudentToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 11);
        // storeUserToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 1);
-
-                Student student2 = storeStudentToDatabase2("Freyja", "Jökulsdóttir", "freyja@concordia.ca", STUDENT, 12);
-        Student student3 = storeStudentToDatabase2("Parisa", "Nikzad", "parisa@concordia.ca", STUDENT, 13);
-        Student student4 = storeStudentToDatabase2("Rana", "Jyotsna ", "rana@concordia.ca", STUDENT, 14);
-        Student student5 = storeStudentToDatabase2("Robert", "Deniro ", "alex@concordia.ca", STUDENT, 15);
-        Student student6 = storeStudentToDatabase2("Lana", "DelRey ", "lana@concordia.ca", STUDENT, 16);
-        Student student7 = storeStudentToDatabase2("Jonathan", "BonJovi ", "jonathan@concordia.ca", STUDENT, 17);
-        Student student8 = storeStudentToDatabase2("Micheal", "Jackson ", "micheal@concordia.ca", STUDENT, 18);
-        Student student9 = storeStudentToDatabase2("George", "Michael", "george@concordia.ca", STUDENT, 19);
-        Student student10 = storeStudentToDatabase2("Ed", "Sheeran ", "ed@concordia.ca", STUDENT, 20);
-        storeUserToDatabase("Salvatore", "Colavita", "Salvatore.Colavita@concordia.ca", ADMIN, 4);
+//
+//                Student student2 = storeStudentToDatabase2("Freyja", "Jökulsdóttir", "freyja@concordia.ca", STUDENT, 12);
+//        Student student3 = storeStudentToDatabase2("Parisa", "Nikzad", "parisa@concordia.ca", STUDENT, 13);
+//        Student student4 = storeStudentToDatabase2("Rana", "Jyotsna ", "rana@concordia.ca", STUDENT, 14);
+//        Student student5 = storeStudentToDatabase2("Robert", "Deniro ", "alex@concordia.ca", STUDENT, 15);
+//        Student student6 = storeStudentToDatabase2("Lana", "DelRey ", "lana@concordia.ca", STUDENT, 16);
+//        Student student7 = storeStudentToDatabase2("Jonathan", "BonJovi ", "jonathan@concordia.ca", STUDENT, 17);
+//        Student student8 = storeStudentToDatabase2("Micheal", "Jackson ", "micheal@concordia.ca", STUDENT, 18);
+//        Student student9 = storeStudentToDatabase2("George", "Michael", "george@concordia.ca", STUDENT, 19);
+//        Student student10 = storeStudentToDatabase2("Ed", "Sheeran ", "ed@concordia.ca", STUDENT, 20);
+//        storeUserToDatabase("Salvatore", "Colavita", "Salvatore.Colavita@concordia.ca", ADMIN, 4);
 
         students.add(student1);
-        students.add(student2);
-        students.add(student3);
-        students.add(student4);
-        students.add(student5);
-        students.add(student6);
-        students.add(student7);
-        students.add(student8);
-        students.add(student9);
-        students.add(student10);
+//        students.add(student2);
+//        students.add(student3);
+//        students.add(student4);
+//        students.add(student5);
+//        students.add(student6);
+//        students.add(student7);
+//        students.add(student8);
+//        students.add(student9);
+//        students.add(student10);
         return students;
     }
 

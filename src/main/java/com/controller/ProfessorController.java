@@ -3,10 +3,10 @@ package com.controller;
 import com.model.User;
 import com.model.request.GradeList;
 import com.model.request.GradeRequest;
-import com.model.request.TuitionRequest;
 import com.model.sc.Course;
 import com.model.sc.Student;
 import com.model.sc.Teacher;
+import com.repository.TeacherRepository;
 import com.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by maysam.mokarian on 9/21/2017.
@@ -26,6 +28,8 @@ import java.util.List;
 public class ProfessorController {
     @Autowired
     private TeacherService teacherService;
+    @Autowired
+    private TeacherRepository teacherRepository;
 
     @RequestMapping(value = "/professor/home", method = RequestMethod.GET)
     public ModelAndView professorHome() {
@@ -41,40 +45,52 @@ public class ProfessorController {
     @RequestMapping(value = "/professor/grades", method = RequestMethod.GET)
     public ModelAndView professorGrades() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Teacher teacher = teacherService.findByEmail(auth.getName());
-        ModelAndView modelAndView = new ModelAndView();
-        List<Student> students = new ArrayList<>();
-        students.addAll(teacher.getStudents());
-        GradeList gradeList = new GradeList();
-        List<GradeRequest> gradeRequests = new ArrayList();
-        for (Student student : students) {
-            List<Course> courses = new ArrayList<>();
-            courses.addAll(student.getCoursesForCurrentSemester());
-            for (Course course : courses) {
-                GradeRequest gradeRequest = new GradeRequest();
-                gradeRequest.setCourse(course.getCourseName());
-                gradeRequest.setGrade(course.getGrade());
-                gradeRequest.setStudentEmail(student.getEmail());
-                gradeRequest.setContactInfo("ADDRESS:" + student.getAddress() + ", PHONE: " + student.getPhone());
-                gradeRequests.add(gradeRequest);
-            }
 
-        }
-        gradeList.setGradeRequests(gradeRequests);
+        Teacher teacher = teacherService.findByEmail(auth.getName());
+        GetList getList = new GetList(teacher).invoke();
+        ModelAndView modelAndView = getList.getModelAndView();
+        GradeList gradeList = getList.getGradeList();
         modelAndView.addObject("gradeList", gradeList);
         modelAndView.setViewName("professor/grades");
+        modelAndView.addObject("gradeRequest", new GradeRequest());
 
         return modelAndView;
     }
 
     @RequestMapping(value = "/professor/grades", method = RequestMethod.POST)
-    public ModelAndView professorGradesPost(GradeRequest gradeList) {
+    public ModelAndView professorGradesPost(GradeRequest gradeRequest) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         Teacher teacher = teacherService.findByEmail(auth.getName());
-        ModelAndView modelAndView = new ModelAndView();
+
+        List<Student> students = new ArrayList<>();
+        students.addAll(teacher.getStudents());
+        Student student = students.get(0);
+        Set<Course> courseSet = student.getCoursesForCurrentSemester();
+        List<Course> courses = new ArrayList<>();
+        courses.addAll(courseSet);
+        courses.get(0).setGrade(gradeRequest.getGrade());
+        Set<Course> courses1 = new HashSet<>(courses);
+        student.setCoursesForCurrentSemester(courses1);
+        students.remove(0);
+        students.add(student);
+
+        teacher.setStudents(new HashSet<>(students));
+        teacherRepository.save(teacher);
+        GetList getList = new GetList(teacher).invoke();
+        GradeList gradeList = getList.getGradeList();
+
+//        studentRepository.saveAndFlush(student);
+
 //
 //        modelAndView.addObject("students", teacher.getStudents());
 //        modelAndView.setViewName("professor/grades");
+        ModelAndView modelAndView = getList.getModelAndView();
+
+        modelAndView.addObject("gradeList", gradeList);
+        modelAndView.setViewName("professor/grades");
+        modelAndView.addObject("gradeRequest", new GradeRequest());
+
 
         return modelAndView;
     }
@@ -84,5 +100,46 @@ public class ProfessorController {
         ModelAndView modelAndView = new ModelAndView();
 
         return modelAndView;
+    }
+
+    private class GetList {
+        private Teacher teacher;
+        private ModelAndView modelAndView;
+        private GradeList gradeList;
+
+        public GetList(Teacher teacher) {
+            this.teacher = teacher;
+        }
+
+        public ModelAndView getModelAndView() {
+            return modelAndView;
+        }
+
+        public GradeList getGradeList() {
+            return gradeList;
+        }
+
+        public GetList invoke() {
+            modelAndView = new ModelAndView();
+            List<Student> students = new ArrayList<>();
+            students.addAll(teacher.getStudents());
+            gradeList = new GradeList();
+            List<GradeRequest> gradeRequests = new ArrayList();
+            for (Student student : students) {
+                List<Course> courses = new ArrayList<>();
+                courses.addAll(student.getCoursesForCurrentSemester());
+                for (Course course : courses) {
+                    GradeRequest gradeRequest = new GradeRequest();
+                    gradeRequest.setCourse(course.getCourseName());
+                    gradeRequest.setGrade(course.getGrade());
+                    gradeRequest.setStudentEmail(student.getEmail());
+                    gradeRequest.setContactInfo("ADDRESS:" + student.getAddress() + ", PHONE: " + student.getPhone());
+                    gradeRequests.add(gradeRequest);
+                }
+
+            }
+            gradeList.setGradeRequests(gradeRequests);
+            return this;
+        }
     }
 }
