@@ -1,0 +1,60 @@
+For Students:
+-View Weekly Schedule - for current and next semester
+-Enroll in Courses	
+	-Only SOEN courses if you are a SOEN student
+	-Only COMP courses if you are a COMP student
+	-Only 3 courses per semester
+-Add
+-Drop
+-My Academics
+View My Course History
+-Include multiple semsters
+View My Grades
+-Choose a semester
+Advisor (A Side Display)
+Important Information (A Side Display with Links)
+SID Help on Student Hub (http://www.concordia.ca/students/your-sis.html)
+Term Dates and Deadlines (http://www.concordia.ca/students/registration/term-dates-deadlines.html)
+Fee Payment Deadlines (http://www.concordia.ca/admissions/tuition-fees/fee-payment-deadlines.html) 
+My Important Links (A Side Display with Links)
+Finances
+Account Summary
+Due Now (Display)
+Future Due (Display)
+Make a payment
+Block Access after a certain date if the student hasn’t paid
+International/Canadian/Quebecois
+Give a warning to the student after a certain date
+Use the Concordia Tuition Fee Calculator
+Pay with a card 
+Personal Information
+Contact Information
+Permanent Address (Display)
+Cellular Phone (Display)
+Address while at Concordia (Display)
+Home E-mail (Display)
+For Faculty: 
+Advisor:
+Register Students from Waitlist
+Split a course into more sections
+Register Students in spite of time conflict
+Register Students in a course from different faculty
+Register Student in spite of maximum courses has been reached
+Contact Professors of courses before registering students from waitlist
+Professor:
+Upload Grades
+Modify Grades - make assumption about time block (3 months after taught)
+Get student information
+
+Two faculties
+Software Engineering
+Computer Science
+
+Three Semesters
+Summer
+Fall
+Winter
+
+Make an assumption to if the system can be used by multiple people at once or only one person
+Just Graduate Students 
+Courses held once a week in Fall and Winter, Twice a week in the Summer
