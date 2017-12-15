@@ -1,7 +1,11 @@
 package com.model.request;
 
 /**
- * Created by maysam.mokarian on 11/11/2017.
+ * A student contact information request
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 11.11.2017
  */
 public class ContactInfoRequest {
     private String phone;

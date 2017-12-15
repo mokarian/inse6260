@@ -7,7 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * Created by maysam.mokarian on 12/3/2017.
+ * A teacher repository interface
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 03.12.2017
  */
 @Repository("teacherRepository")
 @Qualifier("teacherRepo")

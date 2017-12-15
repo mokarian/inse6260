@@ -3,7 +3,11 @@ package com.model.request;
 import java.util.List;
 
 /**
- * Created by maysam.mokarian on 12/4/2017.
+ * A list of grade requests
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 03.12.2017
  */
 public class GradeList {
     List<GradeRequest> gradeRequests;

@@ -1,7 +1,11 @@
 package com.model.request;
 
 /**
- * Created by maysam.mokarian on 12/4/2017.
+ * A response for grades and related models
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 03.12.2017
  */
 public class GradeResponse {
     private String studentEmail;

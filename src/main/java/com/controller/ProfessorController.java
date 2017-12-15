@@ -22,7 +22,11 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by maysam.mokarian on 9/21/2017.
+ * A professor controller
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 21.09.2017
  */
 @Controller
 public class ProfessorController {
@@ -80,11 +84,6 @@ public class ProfessorController {
         GetList getList = new GetList(teacher).invoke();
         GradeList gradeList = getList.getGradeList();
 
-//        studentRepository.saveAndFlush(student);
-
-//
-//        modelAndView.addObject("students", teacher.getStudents());
-//        modelAndView.setViewName("professor/grades");
         ModelAndView modelAndView = getList.getModelAndView();
 
         modelAndView.addObject("gradeList", gradeList);
@@ -97,7 +96,13 @@ public class ProfessorController {
 
     @RequestMapping(value = "/professor/contactinfo", method = RequestMethod.GET)
     public ModelAndView professorContactInfo() {
-        ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Teacher teacher = teacherService.findByEmail(auth.getName());
+        GetList getList = new GetList(teacher).invoke();
+        ModelAndView modelAndView = getList.getModelAndView();
+        GradeList gradeList = getList.getGradeList();
+        modelAndView.addObject("gradeList", gradeList);
+        modelAndView.setViewName("professor/contactinfo");
 
         return modelAndView;
     }
@@ -141,5 +146,20 @@ public class ProfessorController {
             gradeList.setGradeRequests(gradeRequests);
             return this;
         }
+    }
+
+    @RequestMapping(value = "/professor/contactinfo", method = RequestMethod.POST)
+    public ModelAndView professorContactInfoPost() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Teacher teacher = teacherService.findByEmail(auth.getName());
+
+        GetList getList = new GetList(teacher).invoke();
+        GradeList gradeList = getList.getGradeList();
+        ModelAndView modelAndView = getList.getModelAndView();
+
+        modelAndView.addObject("gradeList", gradeList);
+        modelAndView.setViewName("professor/contactinfo");
+
+        return modelAndView;
     }
 }

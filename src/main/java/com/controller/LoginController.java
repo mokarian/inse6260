@@ -21,6 +21,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A login controller
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 24.10.2017
+ */
 @Controller
 public class LoginController {
 

@@ -14,7 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by maysam.mokarian on 12/3/2017.
+ * A service class for teacher object
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 03.12.2017
  */
 @Service
 public class TeacherService {

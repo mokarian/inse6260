@@ -25,6 +25,13 @@ import java.util.Set;
 
 import static org.hibernate.cfg.AvailableSettings.USER;
 
+/**
+ * A security configuration
+ *
+ * @author Maysam Mokarian
+ * @version 2.0
+ * @since 24.10.2017
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -51,7 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private CourseRepository courseRepository;
 
     @Autowired
-    private TeacherRepository  teacherRepository;
+    private TeacherRepository teacherRepository;
 
     @Value("${spring.queries.users-query}")
     private String usersQuery;
@@ -119,6 +126,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 //        storeUserToDatabase("Freyja", "Jökulsdóttir", "freyja@concordia.ca", STUDENT, 2);
 //        storeStudentToDatabase("Freyja", "Jökulsdóttir", "freyja@concordia.ca", STUDENT, 2);
+        storeUserToDatabase("rachida", "dssouli", "rachida.dssouli@concordia.ca", TEACHER, 3);
         storeUserToDatabase("Salvatore", "Colavita", "Salvatore.Colavita@concordia.ca", ADMIN, 4);
         createCoursesOfferedThisSemester();
     }

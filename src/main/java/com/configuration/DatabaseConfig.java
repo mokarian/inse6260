@@ -13,7 +13,11 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 /**
- * Created by maysam.mokarian on 11/10/2017.
+ * A database configuration
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 10.11.2017
  */
 @Configuration
 public class DatabaseConfig {

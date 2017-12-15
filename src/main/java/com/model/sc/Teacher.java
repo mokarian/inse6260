@@ -8,7 +8,11 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by maysam.mokarian on 10/24/2017.
+ * A teacher object
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 24.10.2017
  */
 @Entity
 @Table(name = "teacher")
@@ -52,7 +56,7 @@ public class Teacher extends User {
     public void setStudents(Set<Student> students) {
         this.students = students;
     }
-@Override
+    @Override
     public Set<Role> getRoles() {
         return roles;
     }

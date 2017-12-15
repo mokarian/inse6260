@@ -9,7 +9,11 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by maysam.mokarian on 10/24/2017.
+ * A student object
+ *
+ * @author Maysam Mokarian
+ * @version 1.0
+ * @since 24.10.2017
  */
 @Entity
 @Table(name = "student")
@@ -27,17 +31,6 @@ public class Student extends User {
     private Set<Course> coursesForCurrentSemester;
     @Column(name = "tuition")
     private BigDecimal tuition;
- /*
-    public Student makeStudent() {
-        Student student = new Student();
-        student.setEmail("test@concordia.com");
-        student.setLastName("last");
-        student.setName("first");
-        student.setPassword("password");
-        student.setUser_id(77);
-        return student;
-    }
-    */
 
     public String getAddress() {
         return address;
