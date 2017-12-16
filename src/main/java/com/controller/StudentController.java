@@ -3,6 +3,7 @@ package com.controller;
 import com.model.request.ContactInfoRequest;
 import com.model.request.TuitionRequest;
 import com.model.sc.Course;
+import com.model.sc.ProgramType;
 import com.model.sc.Student;
 import com.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,16 @@ public class StudentController {
         // modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
         modelAndView.addObject("studentMessage", "Content Available Only for Users with Student Role");
         modelAndView.setViewName("student/home");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/student/chooseterm", method = RequestMethod.GET)
+    public ModelAndView studentChooseTerm() {
+        ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Student user = studentService.findByEmail(auth.getName());
+
+        modelAndView.setViewName("student/chooseterm");
         return modelAndView;
     }
 
@@ -132,10 +143,14 @@ public class StudentController {
         List<Course> courses =studentService.getCoursesOfferedThisSemester();
         String message = "";
         for(Course course:courses){
-            if(course.getCourseName().equalsIgnoreCase(courseId) && noConflictsDetected( user.getCoursesForCurrentSemester(),course)){
-                user.getCoursesForCurrentSemester().add(course);
-                studentService.saveStudent(user);
-                message = courseId + " added to your courses successfully";
+            if(course.getCourseName().equalsIgnoreCase(courseId)) {
+                if (noConflictsDetected(user.getCoursesForCurrentSemester(), course, user.getProgram())) {
+                    user.getCoursesForCurrentSemester().add(course);
+                    studentService.saveStudent(user);
+                    message = courseId + " added to your courses successfully";
+                } else {
+                    message = courseId + " could not be added to your courses, please go see an advisor to add it.";
+                }
             }
         }
 
@@ -156,8 +171,13 @@ public class StudentController {
         return modelAndView;
     }
 
-    private boolean noConflictsDetected(Set<Course> coursesForCurrentSemester, Course course) {
+    private boolean noConflictsDetected(Set<Course> coursesForCurrentSemester, Course course, ProgramType program) {
         List<Course> courses = new ArrayList<>(coursesForCurrentSemester);
+        if(courses.size() >= 3)
+            return false;
+        if(!course.getCourseName().contains(program.toString())) {
+            return false;
+        }
         for(Course c:courses){
             if(c.getSchedules().contains(course.getSchedules())){
                 return false;
@@ -223,14 +243,14 @@ public class StudentController {
             message = "the amount entered is more than your tuition fee";
         } else if (user.getTuition().subtract(new BigDecimal(stringRequest.getAmount())).signum() == +1) {
             message = "the amount entered is not enough";
-            user.setTuition(user.getTuition().subtract(new BigDecimal(stringRequest.getAmount())));
+            user.setNewTuition(user.getTuition().subtract(new BigDecimal(stringRequest.getAmount())));
             studentService.saveStudent(user);
         } else {
-            user.setTuition(new BigDecimal(0));
+            user.setNewTuition(new BigDecimal(0));
             studentService.saveStudent(user);
             message = "you successfully payed your tuition fee";
         }
-        modelAndView.addObject("tuition", user.getTuition().toString());
+        modelAndView.addObject("tuition", user.getTuition().toString()+" CAD");
         modelAndView.addObject("message", message);
         modelAndView.setViewName("student/tuition");
         return modelAndView;
