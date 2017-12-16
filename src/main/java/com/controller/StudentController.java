@@ -80,7 +80,7 @@ public class StudentController {
 
     private List<String> getCourseName(List<Course> coursesOfferedThisSemester) {
         List<String> courses = new ArrayList<>();
-        for(Course course:coursesOfferedThisSemester){
+        for (Course course : coursesOfferedThisSemester) {
             courses.add(course.getCourseName());
         }
         return courses;
@@ -129,10 +129,10 @@ public class StudentController {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Student user = studentService.findByEmail(auth.getName());
-        List<Course> courses =studentService.getCoursesOfferedThisSemester();
+        List<Course> courses = studentService.getCoursesOfferedThisSemester();
         String message = "";
-        for(Course course:courses){
-            if(course.getCourseName().equalsIgnoreCase(courseId) && noConflictsDetected( user.getCoursesForCurrentSemester(),course)){
+        for (Course course : courses) {
+            if (course.getCourseName().equalsIgnoreCase(courseId) && noConflictsDetected(user.getCoursesForCurrentSemester(), course)) {
                 user.getCoursesForCurrentSemester().add(course);
                 studentService.saveStudent(user);
                 message = courseId + " added to your courses successfully";
@@ -158,8 +158,8 @@ public class StudentController {
 
     private boolean noConflictsDetected(Set<Course> coursesForCurrentSemester, Course course) {
         List<Course> courses = new ArrayList<>(coursesForCurrentSemester);
-        for(Course c:courses){
-            if(c.getSchedules().contains(course.getSchedules())){
+        for (Course c : courses) {
+            if (c.getSchedules().contains(course.getSchedules())) {
                 return false;
             }
         }
@@ -174,6 +174,39 @@ public class StudentController {
 
         modelAndView.addObject("courses", user.getCoursesForCurrentSemester());
         modelAndView.setViewName("student/schedule");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/student/transcript", method = RequestMethod.GET)
+    public ModelAndView studentTranscript() {
+        ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Student user = studentService.findByEmail(auth.getName());
+        Map<String, Float> cGPA = user.getAnnualGPA();
+        user.getCumulativeGPA();
+
+        List<Course> Courses = new ArrayList<>(user.getCourseHistory());
+        Courses.addAll(user.getCoursesForCurrentSemester());
+        List<String> gpaList = new ArrayList<>();
+        Set<String> years= new HashSet<>();
+        for (Course course : Courses) {
+            String year = course.getSemester().substring(course.getSemester().length() - 4, course.getSemester().length());
+            Float CGPA = 0.0f;
+            if (cGPA.containsKey(year)) {
+                CGPA = cGPA.get(year);
+            }
+            if( !years.contains(year) && CGPA!=0.0f){
+                gpaList.add(year+", annual GPA:"+CGPA);
+            }
+            years.add(year);
+            String garde =course.getGrade()!=0.0f?""+course.getGrade():"not posted";
+            gpaList.add(year+" ,"+course.getSemester().substring(0,course.getSemester().length()-5)+",  COURSE: " + course.getCourseName() + "GRADE:" +garde );
+        }
+        Collections.sort(gpaList);
+        gpaList.add("Comulative GPA:"+user.getCumulativeGPA());
+        modelAndView.addObject("student", user.getName()+ " "+user.getLastName());
+        modelAndView.addObject("gpas", gpaList);
+        modelAndView.setViewName("student/transcript");
         return modelAndView;
     }
 
