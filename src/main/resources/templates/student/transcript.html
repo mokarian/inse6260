@@ -1,0 +1,45 @@
+<!--
+- A view schedule page for a student
+-
+- @author Freyja Jokulsdottir
+- @version 2.0
+- @since 04.11.2017
+ -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Center</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <form th:action="@{/student/home}" method="get">
+            <button class="btn btn-md btn-warning btn-block" type="Submit">Go To Home Page</button>
+        </form>
+        <div class="panel-group" style="margin-top:40px">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Transcript for <span th:utext="${student}"></span></span>
+                </div>
+                <div class="panel-body">
+
+                    <table class="table table-striped">
+                        <!--<tr>-->
+                            <!--<th>Transcript for <span th:utext="${student}"></span></th>-->
+                        <!--</tr>-->
+                        <tr th:each="gpa : ${gpas}">
+                            <td th:text="${gpa}"></td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
