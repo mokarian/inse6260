@@ -31,6 +31,8 @@ public class Student extends User {
     private Set<Course> coursesForCurrentSemester;
     @Column(name = "tuition")
     private BigDecimal tuition;
+    @Column(name = "program")
+    private ProgramType program;
 
     public String getAddress() {
         return address;
@@ -62,6 +64,12 @@ public class Student extends User {
 
     public void setTuition(BigDecimal tuition) {
         this.tuition = tuition;
+    }
+
+    public ProgramType getProgram() {return this.program;}
+
+    public void setProgram(ProgramType program) {
+        this.program = program;
     }
 
     public String getPhone() {
