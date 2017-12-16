@@ -61,7 +61,7 @@ public class StudentTest {
     @Test
     public void getTuition() throws Exception {
         BigDecimal expectedTuition = new BigDecimal(7500.00);
-        this.student.setTuition(expectedTuition);
+        this.student.setNewTuition(expectedTuition);
 
         Assert.assertEquals(expectedTuition, this.student.getTuition());
     }

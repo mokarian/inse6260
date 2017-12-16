@@ -30,6 +30,10 @@ public class Student extends User {
     private Set<Course> coursesForCurrentSemester;
     @Column(name = "tuition")
     private BigDecimal tuition;
+    @Column(name = "program")
+    private ProgramType program;
+    @Column(name = "status")
+    private StudentStatus stauts;
 
     public String getAddress() {
         return address;
@@ -59,8 +63,73 @@ public class Student extends User {
         return tuition;
     }
 
-    public void setTuition(BigDecimal tuition) {
+    /**
+     * A method for setting the tuition of a student according to their status
+     * @param status
+     */
+    public void setTuition(StudentStatus status) {
+        double tuition = 0.0;
+        double compulsuaryFeesPart = 371.23;
+        double compulsuaryFeesFull = 489.26;
+        double healthInsurance = 204.42;
+
+        // Check the immigration status
+        // Quebec Resident
+        if(status.equals(StudentStatus.QCRESIDENT)) {
+            // Find out if student is a full time or a part time student
+            if(this.getCoursesForCurrentSemester().size() > 1)
+                // Full time student
+                tuition += 896.63;
+            else if(this.getCoursesForCurrentSemester().size() == 1)
+                // Part time student
+                tuition += 597.75;
+        }
+        // Canadian and non-Quebec Resident
+        else if(status.equals(StudentStatus.CANADIAN)) {
+            // Find out if student is a full time or a part time student
+            if(this.getCoursesForCurrentSemester().size() > 1)
+                // Full time student
+                tuition += 2776.05;
+            else if(this.getCoursesForCurrentSemester().size() == 1)
+                // Part time student
+                tuition += 1850.70;
+        }
+        // International
+        else if(status.equals(StudentStatus.INTERNATIONAL)) {
+            healthInsurance = 732.64;
+            // Find out if student is a full time or a part time student
+            if(this.getCoursesForCurrentSemester().size() > 1)
+                // Full time student
+                tuition += 6140.03;
+            else if(this.getCoursesForCurrentSemester().size() == 1)
+                // Part time student
+                tuition += 4093.35;
+        }
+
+        if(this.getCoursesForCurrentSemester().size() > 1)
+            tuition += healthInsurance + compulsuaryFeesFull;
+        else
+            tuition += healthInsurance + compulsuaryFeesPart;
+
+        this.tuition = new BigDecimal(tuition);
+    }
+
+    public void setNewTuition(BigDecimal tuition) {
         this.tuition = tuition;
+    }
+
+    public ProgramType getProgram() {return this.program;}
+
+    public void setProgram(ProgramType program) {
+        this.program = program;
+    }
+
+    public StudentStatus getStauts() {
+        return stauts;
+    }
+
+    public void setStauts(StudentStatus stauts) {
+        this.stauts = stauts;
     }
 
     public String getPhone() {

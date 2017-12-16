@@ -25,7 +25,7 @@ public class TuitionRequestTest {
     @Before
     public void setUp() throws Exception {
         this.amount = new BigDecimal(7500.00);
-        this.student.setTuition(this.amount);
+        this.student.setNewTuition(this.amount);
     }
 
     @After
