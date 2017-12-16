@@ -243,14 +243,14 @@ public class StudentController {
             message = "the amount entered is more than your tuition fee";
         } else if (user.getTuition().subtract(new BigDecimal(stringRequest.getAmount())).signum() == +1) {
             message = "the amount entered is not enough";
-            user.setTuition(user.getTuition().subtract(new BigDecimal(stringRequest.getAmount())));
+            user.setNewTuition(user.getTuition().subtract(new BigDecimal(stringRequest.getAmount())));
             studentService.saveStudent(user);
         } else {
-            user.setTuition(new BigDecimal(0));
+            user.setNewTuition(new BigDecimal(0));
             studentService.saveStudent(user);
             message = "you successfully payed your tuition fee";
         }
-        modelAndView.addObject("tuition", user.getTuition().toString());
+        modelAndView.addObject("tuition", user.getTuition().toString()+" CAD");
         modelAndView.addObject("message", message);
         modelAndView.setViewName("student/tuition");
         return modelAndView;

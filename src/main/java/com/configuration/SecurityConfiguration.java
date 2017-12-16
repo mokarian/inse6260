@@ -144,7 +144,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         userRepository.save(user);
     }
 
-    public Student storeStudentToDatabase(String firstName, String lastName, String email, String role, int i, ProgramType program) {
+    public Student storeStudentToDatabase(String firstName, String lastName, String email, String role, int i, ProgramType program, StudentStatus status) {
         Student student = new Student();
         student.setName(firstName);
         student.setUser_id(i);
@@ -158,8 +158,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         student.setCourseHistory(createCourseHistory());
         student.setAddress("45 Forden Crescent, Westmount, Quebec H3Y 3H2 Canada");
         student.setPhone("(514)226-0101");
-        student.setTuition(new BigDecimal(2300));
+        student.setTuition(status);
         student.setProgram(program);
+        student.setStauts(status);
       //  studentRepository.save(student);
        // userRepository.save(student);
         return student;
@@ -251,7 +252,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private Set<Student> createStudents() {
         Set<Student> students = new HashSet<>();
-        Student student1 = storeStudentToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 11, ProgramType.COMP);
+        Student student1 = storeStudentToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 11, ProgramType.COMP, StudentStatus.INTERNATIONAL);
        // storeUserToDatabase("Maysam", "Mokarian", "maysam@concordia.ca", STUDENT, 1);
 //
 //                Student student2 = storeStudentToDatabase2("Freyja", "Jökulsdóttir", "freyja@concordia.ca", STUDENT, 12);
