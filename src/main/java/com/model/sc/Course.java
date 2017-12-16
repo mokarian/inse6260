@@ -1,8 +1,10 @@
 package com.model.sc;
 
 
+import com.model.sc.enums.CourseType;
+import com.model.sc.enums.TimeLine;
+
 import javax.persistence.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**

@@ -1,11 +1,11 @@
 package com.model.sc;
 
 import com.model.User;
-import com.model.sc.Course;
+import com.model.sc.enums.ProgramType;
+import com.model.sc.enums.StudentStatus;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 
 /**

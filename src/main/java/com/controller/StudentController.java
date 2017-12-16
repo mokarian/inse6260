@@ -3,7 +3,7 @@ package com.controller;
 import com.model.request.ContactInfoRequest;
 import com.model.request.TuitionRequest;
 import com.model.sc.Course;
-import com.model.sc.ProgramType;
+import com.model.sc.enums.ProgramType;
 import com.model.sc.Student;
 import com.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;

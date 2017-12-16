@@ -6,6 +6,10 @@ import javax.sql.DataSource;
 import com.model.Role;
 import com.model.User;
 import com.model.sc.*;
+import com.model.sc.enums.CourseType;
+import com.model.sc.enums.ProgramType;
+import com.model.sc.enums.StudentStatus;
+import com.model.sc.enums.TimeLine;
 import com.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,12 +22,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import static org.hibernate.cfg.AvailableSettings.USER;
 
 /**
  * A security configuration

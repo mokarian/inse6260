@@ -1,13 +1,13 @@
 package com.model.sc;
 
+import com.model.sc.enums.CourseType;
+import com.model.sc.enums.TimeLine;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-
-import static org.junit.Assert.*;
 
 /**
  * A unit test for Schedule object
