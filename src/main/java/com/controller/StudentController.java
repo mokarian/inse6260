@@ -215,37 +215,19 @@ public class StudentController {
                 CGPA = cGPA.get(year);
             }
             if( !years.contains(year) && CGPA!=0.0f){
-                gpaList.add(year+", annual GPA:"+CGPA);
+                gpaList.add(year+": GPA: "+CGPA);
             }
             years.add(year);
-            String garde =course.getGrade()!=0.0f?""+course.getGrade():"not posted";
-            gpaList.add(year+" ,"+course.getSemester().substring(0,course.getSemester().length()-5)+",  COURSE: " + course.getCourseName() + "GRADE:" +garde );
+            String grade = course.getGrade()!=0.0f?""+course.getGrade():"Not Posted";
+            String space = " | ";
+            String semester = course.getSemester().substring(0,course.getSemester().length()-5);
+            gpaList.add(year +" | " +semester +space +course.getCourseName() +space +grade);
         }
         Collections.sort(gpaList);
-        gpaList.add("Comulative GPA:"+user.getCumulativeGPA());
+        gpaList.add("CGPA: "+user.getCumulativeGPA());
         modelAndView.addObject("student", user.getName()+ " "+user.getLastName());
         modelAndView.addObject("gpas", gpaList);
         modelAndView.setViewName("student/transcript");
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/student/grades", method = RequestMethod.GET)
-    public ModelAndView studentGrades() {
-        ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Student user = studentService.findByEmail(auth.getName());
-
-        List<String> list = new ArrayList<>();
-        List<Course> listOfCourses = new ArrayList<>();
-        listOfCourses.addAll(user.getCoursesForCurrentSemester());
-        for (Course course : listOfCourses) {
-            float grade = course.getGrade();
-            list.add(course.getCourseName() + ", GRADE:"
-                    + (grade != 0f ?
-                    String.valueOf(course.getGrade()) : "Not Posted"));
-        }
-        modelAndView.addObject("grades", list);
-        modelAndView.setViewName("student/grades");
         return modelAndView;
     }
 

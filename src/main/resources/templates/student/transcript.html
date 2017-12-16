@@ -27,11 +27,12 @@
                 <div class="panel-heading">Transcript for <span th:utext="${student}"></span></span>
                 </div>
                 <div class="panel-body">
-
                     <table class="table table-striped">
-                        <!--<tr>-->
-                            <!--<th>Transcript for <span th:utext="${student}"></span></th>-->
-                        <!--</tr>-->
+                        <thead>
+                        <tr>
+                            <th>Year | Semester | Course | Grade</th>
+                        </tr>
+                        </thead>
                         <tr th:each="gpa : ${gpas}">
                             <td th:text="${gpa}"></td>
                         </tr>
