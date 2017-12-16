@@ -7,6 +7,7 @@ import com.model.sc.enums.StudentStatus;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Set;
+import java.util.*;
 
 /**
  * A student object
@@ -150,5 +151,51 @@ public class Student extends User {
                 ", coursesForCurrentSemester=" + coursesForCurrentSemester +
                 ", tuition=" + tuition +
                 '}';
+    }
+
+    public Map<String, Float> getAnnualGPA() {
+        Map<String, Float> gpa = new HashMap();
+        String year = "";
+        for (Course course : courseHistory) {
+            year = (course.getSemester().substring(course.getSemester().length() - 4, course.getSemester().length()));
+            if (gpa.containsKey(year)) {
+                Float previousGrade = gpa.get(year);
+                gpa.put(year, (previousGrade + course.getGrade()) / 2);
+            } else {
+                gpa.put(year, course.getGrade());
+            }
+
+        }
+        List<Course> courses = new ArrayList<>(coursesForCurrentSemester);
+
+        for (Course course : courses) {
+            if (course.getGrade() != 0.0f) {
+                if (gpa.containsKey(year)) {
+                    Float previousGrade = gpa.get(year);
+                    gpa.put(year, (previousGrade + course.getGrade()) / 2);
+                } else {
+                    gpa.put(year, course.getGrade());
+                }
+            }
+        }
+        return gpa;
+    }
+
+    public String getCumulativeGPA() {
+
+        float sum = 0;
+        int counter = 0;
+        for (Course course : courseHistory) {
+            sum = sum + course.getGrade();
+            counter++;
+        }
+        List<Course> courses = new ArrayList<>(coursesForCurrentSemester);
+        for (Course course : courses) {
+            if (course.getGrade() != 0.0f) {
+                sum = sum + course.getGrade();
+                counter++;
+            }
+        }
+        return String.format("%.2f", sum / counter);
     }
 }
