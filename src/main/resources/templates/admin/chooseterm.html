@@ -1,0 +1,54 @@
+<!--
+- A course enrollment page for a student
+-
+- @author Freyja Jokulsdottir
+- @version 2.0
+- @since 04.11.2017
+ -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Center</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <form th:action="@{/admin/home}" method="get">
+        <button class="btn btn-md btn-warning btn-block" type="Submit">Go To Home Page</button>
+    </form>
+    <div class="panel-group" style="margin-top:40px">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Enroll</span>
+            </div>
+            <div class="panel-body">
+                <th>
+                    <h2>Select Term</h2>
+                </th>
+                <th>
+                    <form  th:action="@{/admin/chooseterm}" method="post" th:object="${semesterRequest}">
+                        <div class="radio">
+                            <label><input type="radio" th:name="${Fall}" th:field="*{semester}" th:value="F">Fall</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" th:name="${Winter}" th:field="*{semester}" th:value="W">Winter</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" th:name="${Summer}" th:field="*{semester}" th:value="S">Summer</label>
+                        </div>
+                        <form th:action="@{/foundstudentenroll}" method="get">
+                            <button class="btn btn-md btn-success" type="Submit">Continue</button>
+                        </form>
+                    </form>
+                </th>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
