@@ -61,6 +61,22 @@ public class Student extends User {
         this.coursesForCurrentSemester = coursesForCurrentSemester;
     }
 
+    public Set<Course> getCoursesForSemester(String semester) {
+        if(semester.equalsIgnoreCase("FALL_2017"))
+            return getCoursesForCurrentSemester();
+
+        ArrayList<Course> courses = new ArrayList<>(this.courseHistory);
+        Set<Course> semesterCourses = new HashSet<>();
+
+        for(int i = 0; i < courses.size(); i++) {
+            Course course = courses.get(i);
+            if(course.getSemester().equalsIgnoreCase(semester))
+                semesterCourses.add(course);
+        }
+
+        return semesterCourses;
+    }
+
     public BigDecimal getTuition() {
         return tuition;
     }

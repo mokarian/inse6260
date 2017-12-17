@@ -88,8 +88,8 @@ public class AdminController {
         }
         modelAndView.addObject("courses", list);
 
-        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
-        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester("FALL_2017"));
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester("FALL_2017");
 
         modelAndView.addObject("coursesToAdd", listOfCoursesOffered);
         modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
@@ -108,7 +108,7 @@ public class AdminController {
         String message = "";
 
         if(!courseId.equals("")) {
-            List<Course> courses = studentService.getCoursesOfferedThisSemester();
+            List<Course> courses = studentService.getCoursesOfferedThisSemester("FALL_2017");
 
             for (Course course : courses) {
                 if (course.getCourseName().equalsIgnoreCase(courseId) && noConflictsDetected(this.student.getCoursesForCurrentSemester(), course)) {
@@ -130,8 +130,8 @@ public class AdminController {
         }
         modelAndView.addObject("courses", list);
 
-        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
-        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester("FALL_2017"));
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester("FALL_2017");
 
         modelAndView.addObject("coursesToAdd", listOfCoursesOffered);
         modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
@@ -168,8 +168,8 @@ public class AdminController {
         modelAndView.addObject("courses", list);
 
         modelAndView.addObject("message", message);
-        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
-        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester("FALL_2017"));
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester("FALL_2017");
 
         modelAndView.addObject("coursesToAdd", listOfCoursesOffered);
         modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
@@ -200,10 +200,10 @@ public class AdminController {
     public ModelAndView adminModifyCourseSection() {
         ModelAndView modelAndView = new ModelAndView();
 
-        this.courseListIterator.addAll(studentService.getCoursesOfferedThisSemester());
+        this.courseListIterator.addAll(studentService.getCoursesOfferedThisSemester("FALL_2017"));
 
-        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
-        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester("FALL_2017"));
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester("FALL_2017");
 
         modelAndView.addObject("coursesToModify", listOfCoursesOffered);
         modelAndView.addObject("coursesToModifyFull", listOfCoursesOfferedFull);

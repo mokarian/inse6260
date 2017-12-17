@@ -16,4 +16,7 @@ public enum Semester {
     FALL_2017,
     WINTER_2017,
     SUMMER_2017,
+    FALL_2018,
+    WINTER_2018,
+    SUMMER_2018,
 }

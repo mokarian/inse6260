@@ -1,10 +1,12 @@
 package com.controller;
 
 import com.model.request.ContactInfoRequest;
+import com.model.request.SemesterRequest;
 import com.model.request.TuitionRequest;
 import com.model.sc.Course;
 import com.model.sc.enums.ProgramType;
 import com.model.sc.Student;
+import com.model.sc.enums.Semester;
 import com.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -30,6 +32,8 @@ public class StudentController {
 
     @Autowired
     private StudentService studentService;
+
+    private String semesterToEnroll;
 
     @RequestMapping(value = "/student/home", method = RequestMethod.GET)
     public ModelAndView studentHome() {
@@ -59,12 +63,40 @@ public class StudentController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Student user = studentService.findByEmail(auth.getName());
 
+        modelAndView.addObject("semesterRequest", new SemesterRequest());
+
         modelAndView.setViewName("student/chooseterm");
         return modelAndView;
     }
 
+    @RequestMapping(value = "/student/chooseterm", method = RequestMethod.POST)
+    public ModelAndView studentChooseTermPost(SemesterRequest semesterRequest) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("student/chooseterm");
+
+        String semester ="";
+        semester = semesterRequest.getSemester();
+        if(semester.contains("F")) {
+            semester = Semester.FALL_2017.name();
+            this.semesterToEnroll = semester;
+            return studentEnroll(semester);
+        }
+        if(semester.contains("W")) {
+            semester = Semester.WINTER_2018.name();
+            this.semesterToEnroll = semester;
+            return studentEnroll(semester);
+        }
+        if(semester.contains("S")) {
+            semester = Semester.SUMMER_2018.name();
+            this.semesterToEnroll = semester;
+            return studentEnroll(semester);
+        }
+
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/student/enroll", method = RequestMethod.GET)
-    public ModelAndView studentEnroll() {
+    public ModelAndView studentEnroll(String semester) {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Student user = studentService.findByEmail(auth.getName());
@@ -72,17 +104,16 @@ public class StudentController {
         List<String> list = new ArrayList<>();
 
         List<Course> listOfCourses = new ArrayList<>();
-        listOfCourses.addAll(user.getCoursesForCurrentSemester());
+        listOfCourses.addAll(user.getCoursesForSemester(semester));
         for (Course course : listOfCourses) {
             list.add(course.getCourseName());
         }
         modelAndView.addObject("courses", list);
-        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
-        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester(semester));
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester(semester);
 
         modelAndView.addObject("coursesToAdd", listOfCoursesOffered);
         modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
-
 
         modelAndView.setViewName("student/enroll");
         return modelAndView;
@@ -103,7 +134,7 @@ public class StudentController {
         Student user = studentService.findByEmail(auth.getName());
         String message = "";
         List<Course> courseListIterator = new ArrayList();
-        courseListIterator.addAll(user.getCoursesForCurrentSemester());
+        courseListIterator.addAll(user.getCoursesForSemester(this.semesterToEnroll));
         ListIterator<Course> iterator = courseListIterator.listIterator();
         while (iterator.hasNext()) {
             if (iterator.next().getCourseName().equalsIgnoreCase(courseId)) {
@@ -125,8 +156,8 @@ public class StudentController {
         modelAndView.addObject("courses", list);
 
         modelAndView.addObject("message", message);
-        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
-        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester(this.semesterToEnroll));
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester(this.semesterToEnroll);
 
         modelAndView.addObject("coursesToAdd", listOfCoursesOffered);
         modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
@@ -139,12 +170,12 @@ public class StudentController {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Student user = studentService.findByEmail(auth.getName());
-        List<Course> courses =studentService.getCoursesOfferedThisSemester();
+        List<Course> courses =studentService.getCoursesOfferedThisSemester(this.semesterToEnroll);
         String message = "";
         for(Course course:courses){
             if(course.getCourseName().equalsIgnoreCase(courseId)) {
-                if (noConflictsDetected(user.getCoursesForCurrentSemester(), course, user.getProgram())) {
-                    user.getCoursesForCurrentSemester().add(course);
+                if (noConflictsDetected(user.getCoursesForSemester(this.semesterToEnroll), course, user.getProgram())) {
+                    user.getCoursesForSemester(this.semesterToEnroll).add(course);
                     studentService.saveStudent(user);
                     message = courseId + " added to your courses successfully";
                 } else {
@@ -154,15 +185,15 @@ public class StudentController {
         }
 
         List<String> list = new ArrayList<>();
-        for (Course course : user.getCoursesForCurrentSemester()) {
+        for (Course course : user.getCoursesForSemester(this.semesterToEnroll)) {
             list.add(course.getCourseName());
         }
 
         modelAndView.addObject("courses", list);
 
         modelAndView.addObject("message", message);
-        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
-        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester(this.semesterToEnroll));
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester(this.semesterToEnroll);
 
         modelAndView.addObject("coursesToAdd", listOfCoursesOffered);
         modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
@@ -191,7 +222,7 @@ public class StudentController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Student user = studentService.findByEmail(auth.getName());
 
-        modelAndView.addObject("courses", user.getCoursesForCurrentSemester());
+        modelAndView.addObject("courses", user.getCoursesForSemester(this.semesterToEnroll));
         modelAndView.setViewName("student/schedule");
         return modelAndView;
     }
@@ -205,7 +236,7 @@ public class StudentController {
         user.getCumulativeGPA();
 
         List<Course> Courses = new ArrayList<>(user.getCourseHistory());
-        Courses.addAll(user.getCoursesForCurrentSemester());
+        Courses.addAll(user.getCoursesForSemester(this.semesterToEnroll));
         List<String> gpaList = new ArrayList<>();
         Set<String> years= new HashSet<>();
         for (Course course : Courses) {
