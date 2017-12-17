@@ -1,11 +1,13 @@
 package com.controller;
 
+import com.model.Role;
 import com.model.User;
 import com.model.request.SemesterRequest;
 import com.model.request.StudentEmailRequest;
 import com.model.sc.Course;
 import com.model.sc.Student;
 import com.model.sc.enums.Semester;
+import com.repository.RoleRepository;
 import com.service.UserService;
 import com.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    RoleRepository roleRepository;
 
     private Student student;
     private List<Course> courseListIterator = new ArrayList<>();
@@ -106,7 +110,8 @@ public class AdminController {
 
         try {
             this.student = studentService.findByEmail(email);
-            System.out.println(email);
+            Role userRole = roleRepository.findByRole("STUDENT");
+            student.setRoles(new HashSet<>(Arrays.asList(userRole)));
             return adminChooseTerm();
         } catch (NullPointerException e) {
             e.getMessage();
