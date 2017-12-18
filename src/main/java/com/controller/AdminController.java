@@ -156,10 +156,13 @@ public class AdminController {
             List<Course> courses = studentService.getCoursesOfferedThisSemester(this.semesterToEnroll);
 
             for (Course course : courses) {
-                if (course.getCourseName().equalsIgnoreCase(courseId) && noConflictsDetected(this.student.getCoursesForSemester(this.semesterToEnroll), course)) {
-                    this.student.setCoursesForSemester(course, this.semesterToEnroll);
-                    studentService.saveStudent(this.student);
-                    message = courseId + " added to " + name + "'s courses successfully";
+                if (course.getCourseName().equalsIgnoreCase(courseId)) {
+                    if (noConflictsDetected(this.student.getCoursesForSemester(this.semesterToEnroll), course)) {
+                        this.student.setCoursesForSemester(course, this.semesterToEnroll);
+                        studentService.saveStudent(this.student);
+                        message = courseId + " added to " + name + "'s courses successfully";
+                    } else
+                        message = courseId + " could not be added to " + name + "'s courses";
                 }
             }
         }
@@ -189,13 +192,16 @@ public class AdminController {
     public ModelAndView adminDrop(@PathVariable String courseId) {
         ModelAndView modelAndView = new ModelAndView();
 
+        String name = this.student.getName() +" " +this.student.getLastName();
+        modelAndView.addObject("studentName", name);
+
         String message = "";
         List<Course> courseListIterator = new ArrayList();
         courseListIterator.addAll(this.student.getCoursesForSemester(this.semesterToEnroll));
         ListIterator<Course> iterator = courseListIterator.listIterator();
         while (iterator.hasNext()) {
             Course course = iterator.next();
-            if (iterator.next().getCourseName().equalsIgnoreCase(courseId)) {
+            if (course.getCourseName().equalsIgnoreCase(courseId)) {
                 iterator.remove();
                 this.student.removeCoursesForSemester(course, this.semesterToEnroll);
                 studentService.saveStudent(this.student);
@@ -219,7 +225,6 @@ public class AdminController {
 
         modelAndView.addObject("coursesToAdd", listOfCoursesOffered);
         modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
-
         modelAndView.setViewName("admin/foundstudentenroll");
         return modelAndView;
     }
