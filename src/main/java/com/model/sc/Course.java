@@ -33,6 +33,54 @@ public class Course {
     @Column (name = "semester")
     private Semester semester;
     private float grade;
+    private int capacity = 30;
+    private int enrollementTotal;
+    private int availableSeats;
+    private int waitlistCapacity = 5;
+    private int waitlistTotal;
+    private int availableWaitlist;
+
+    public int getEnrollementTotal() {
+        return enrollementTotal;
+    }
+
+    public void setEnrollementTotal(int enrollementTotal) {
+        this.enrollementTotal = enrollementTotal;
+    }
+
+    public int getAvailableSeats() {
+        this.availableSeats = this.capacity - this.enrollementTotal;
+        return availableSeats;
+    }
+
+    public void setAvailableSeats(int availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+
+    public int getWaitlistCapacity() {
+        return waitlistCapacity;
+    }
+
+    public void setWaitlistCapacity(int waitlistCapacity) {
+        this.waitlistCapacity = waitlistCapacity;
+    }
+
+    public int getWaitlistTotal() {
+        return waitlistTotal;
+    }
+
+    public void setWaitlistTotal(int waitlistTotal) {
+        this.waitlistTotal = waitlistTotal;
+    }
+
+    public int getAvailableWaitlist() {
+        this.availableWaitlist = this.waitlistCapacity - this.waitlistTotal;
+        return availableWaitlist;
+    }
+
+    public void setAvailableWaitlist(int availableWaitlist) {
+        this.availableWaitlist = availableWaitlist;
+    }
 
     /**
      * A getter for course ID
@@ -204,6 +252,14 @@ public class Course {
             schedulesSet.add(scheduleArray[i].split(",")[0]);
         }
         return schedulesSet;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     /**
