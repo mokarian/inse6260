@@ -46,18 +46,44 @@ public class AdminController {
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(auth.getName());
+        User user = this.userService.findUserByEmail(auth.getName());
         modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
         modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
         modelAndView.setViewName("admin/home");
         return modelAndView;
     }
 
+    @RequestMapping(value = "admin/enroll", method = RequestMethod.GET)
+    public ModelAndView adminEnroll() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("studentEmailRequest", new StudentEmailRequest());
+
+        modelAndView.setViewName("admin/enroll");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "admin/enroll", method = RequestMethod.POST)
+    public ModelAndView adminEnrollPost(StudentEmailRequest emailRequest) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/enroll");
+
+        String email ="";
+        email = emailRequest.getStudentEmail();
+
+        try {
+            this.student = studentService.findByEmail(email);
+            Role userRole = roleRepository.findByRole("STUDENT");
+            this.student.setRoles(new HashSet<>(Arrays.asList(userRole)));
+            return adminChooseTerm();
+        } catch (NullPointerException e) {
+            e.getMessage();
+            return modelAndView;
+        }
+    }
+
     @RequestMapping(value = "/admin/chooseterm", method = RequestMethod.GET)
     public ModelAndView adminChooseTerm() {
         ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(auth.getName());
 
         modelAndView.addObject("semesterRequest", new SemesterRequest());
 
@@ -91,35 +117,7 @@ public class AdminController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "admin/enroll", method = RequestMethod.GET)
-    public ModelAndView adminEnroll() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("studentEmailRequest", new StudentEmailRequest());
-
-        modelAndView.setViewName("admin/enroll");
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "admin/enroll", method = RequestMethod.POST)
-    public ModelAndView adminEnrollPost(StudentEmailRequest emailRequest) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin/enroll");
-
-        String email ="";
-        email = emailRequest.getStudentEmail();
-
-        try {
-            this.student = studentService.findByEmail(email);
-            Role userRole = roleRepository.findByRole("STUDENT");
-            student.setRoles(new HashSet<>(Arrays.asList(userRole)));
-            return adminChooseTerm();
-        } catch (NullPointerException e) {
-            e.getMessage();
-            return modelAndView;
-        }
-    }
-
-    @RequestMapping(value = "admin/foundstudentenroll/{courseId}", method = RequestMethod.GET)
+    @RequestMapping(value = "admin/foundstudentenroll", method = RequestMethod.GET)
     public ModelAndView adminFoundStudentEnroll(String semester) {
         ModelAndView modelAndView = new ModelAndView();
 
@@ -129,7 +127,7 @@ public class AdminController {
         List<String> list = new ArrayList<>();
 
         List<Course> listOfCourses = new ArrayList<>();
-        listOfCourses.addAll(this.student.getCoursesForSemester(semester));
+        listOfCourses.addAll(this.student.getCoursesForSemester(this.semesterToEnroll));
         for (Course course : listOfCourses) {
             list.add(course.getCourseName());
         }
@@ -240,6 +238,8 @@ public class AdminController {
             if(c.getSchedules().contains(course.getSchedules())){
                 return false;
             }
+            if(c.getCourseName().equals(course.getCourseName()))
+                return false;
         }
         return true;
     }
