@@ -7,7 +7,9 @@ import com.model.request.StudentEmailRequest;
 import com.model.sc.Course;
 import com.model.sc.Student;
 import com.model.sc.enums.Semester;
+import com.repository.CourseRepository;
 import com.repository.RoleRepository;
+import com.service.CourseService;
 import com.service.UserService;
 import com.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,8 @@ public class AdminController {
     private StudentService studentService;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private CourseService courseService;
 
     private Student student;
     private List<Course> courseListIterator = new ArrayList<>();
@@ -160,7 +164,15 @@ public class AdminController {
                     if (noConflictsDetected(this.student.getCoursesForSemester(this.semesterToEnroll), course)) {
                         this.student.setCoursesForSemester(course, this.semesterToEnroll);
                         studentService.saveStudent(this.student);
-                        message = courseId + " added to " + name + "'s courses successfully";
+                        if(course.getEnrollementTotal() >= course.getCapacity()) {
+                            course.setWaitlistTotal(course.getWaitlistTotal() + 1);
+                            message = name +" has been added to the waitlist of " +courseId + " successfully";
+                        }
+                        else {
+                            course.setEnrollementTotal(course.getEnrollementTotal() + 1);
+                            message = courseId + " added to " + name + "'s courses successfully";
+                        }
+                        courseService.saveCourse(course);
                     } else
                         message = courseId + " could not be added to " + name + "'s courses";
                 }
@@ -205,6 +217,11 @@ public class AdminController {
                 iterator.remove();
                 this.student.removeCoursesForSemester(course, this.semesterToEnroll);
                 studentService.saveStudent(this.student);
+                if(course.getEnrollementTotal() >= course.getCapacity())
+                    course.setWaitlistTotal(course.getWaitlistTotal()-1);
+                else
+                    course.setEnrollementTotal(course.getEnrollementTotal()-1);
+                courseService.saveCourse(course);
                 message = "course(" + courseId + ") dropped successfully ";
                 break;
             } else {
@@ -239,6 +256,8 @@ public class AdminController {
 
     private boolean noConflictsDetected(Set<Course> coursesForCurrentSemester, Course course) {
         List<Course> courses = new ArrayList<>(coursesForCurrentSemester);
+        if(course.getWaitlistTotal() >= course.getWaitlistCapacity())
+            return false;
         for(Course c:courses){
             if(c.getSchedules().contains(course.getSchedules())){
                 return false;
