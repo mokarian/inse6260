@@ -7,6 +7,7 @@ import com.model.sc.Course;
 import com.model.sc.enums.ProgramType;
 import com.model.sc.Student;
 import com.model.sc.enums.Semester;
+import com.service.CourseService;
 import com.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,8 @@ public class StudentController {
 
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private CourseService courseService;
 
     private String semesterToEnroll;
     private double futureDue;
@@ -131,6 +134,11 @@ public class StudentController {
                 iterator.remove();
                 user.removeCoursesForSemester(course, this.semesterToEnroll);
                 studentService.saveStudent(user);
+                if(course.getEnrollementTotal() >= course.getCapacity())
+                    course.setWaitlistTotal(course.getWaitlistTotal()-1);
+                else
+                    course.setEnrollementTotal(course.getEnrollementTotal()-1);
+                courseService.saveCourse(course);
                 message = "course(" + courseId + ") dropped successfully ";
                 break;
             } else {
@@ -170,9 +178,19 @@ public class StudentController {
                 if (noConflictsDetected(user.getCoursesForSemester(this.semesterToEnroll), course, user.getProgram())) {
                     user.setCoursesForSemester(course, this.semesterToEnroll);
                     studentService.saveStudent(user);
-                    message = courseId + " added to your courses successfully";
+                    if(course.getEnrollementTotal() >= course.getCapacity()) {
+                        course.setWaitlistTotal(course.getWaitlistTotal() + 1);
+                        message = "You have been added to the waitlist of " +courseId + " successfully";
+                    }
+                    else {
+                        course.setEnrollementTotal(course.getEnrollementTotal() + 1);
+                        message = courseId + " added to your courses successfully";
+                    }
+                    courseService.saveCourse(course);
                 } else {
-                    if(user.getCoursesForSemester(this.semesterToEnroll).size() >= 3)
+                    if(course.getWaitlistTotal() >= course.getWaitlistTotal())
+                        message = courseId + " could not be added to your courses because the course and waitlist is full.";
+                    else if(user.getCoursesForSemester(this.semesterToEnroll).size() >= 3)
                         message = courseId + " could not be added to your courses because you have reached the maximum course load.";
                     else if(!course.getCourseName().contains(user.getProgram().toString()))
                         message = courseId + " could not be added to your courses because it is not withing your faculty, please go see an advisor to add it.";
@@ -207,6 +225,8 @@ public class StudentController {
         if(!course.getCourseName().contains(program.toString())) {
             return false;
         }
+        if(course.getWaitlistTotal() >= course.getWaitlistCapacity())
+            return false;
         for(Course c:courses){
             if(c.getSchedules().contains(course.getSchedules())){
                 return false;

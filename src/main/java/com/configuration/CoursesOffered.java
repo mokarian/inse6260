@@ -10,6 +10,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A class for courses to populate the database
+ *
+ * @author Freyja Jokulsdottir
+ * @version 1.0
+ * @since 17.12.2017
+ */
 public class CoursesOffered {
     public Set<Course> createCoursesOfferedThisSemester() {
         Set<Course> courseHistories = new HashSet<>();
@@ -36,72 +43,84 @@ public class CoursesOffered {
         courseHistory1.setCourseName("COMP 691");
         courseHistory1.setSemester(Semester.WINTER_2018);
         courseHistory1.setSection(1);
+        courseHistory1 = this.setCapacity(courseHistory1, 30, 5);
         courseHistory1.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.TUESDAY_5PM_TO_7PM, CourseType.LAB, TimeLine.TUESDAY_7PM_TO_9PM));
 
         Course courseHistory2 = new Course();
         courseHistory2.setCourseName("COMP 6331");
         courseHistory2.setSemester(Semester.WINTER_2018);
         courseHistory2.setSection(1);
+        courseHistory2 = this.setCapacity(courseHistory2, 29, 0);
         courseHistory2.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.TUESDAY_1PM_TO_3PM, CourseType.LAB, TimeLine.TUESDAY_7PM_TO_9PM));
 
         Course courseHistory3 = new Course();
         courseHistory3.setCourseName("COMP 6331");
         courseHistory3.setSemester(Semester.WINTER_2018);
         courseHistory3.setSection(2);
+        courseHistory3 = this.setCapacity(courseHistory3, 25, 0);
         courseHistory3.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.THURSDAY_1PM_TO_3PM, CourseType.LAB, TimeLine.THURSDAY_7PM_TO_9PM));
 
         Course courseHistory4 = new Course();
         courseHistory4.setCourseName("COMP 6331");
         courseHistory4.setSemester(Semester.WINTER_2018);
         courseHistory4.setSection(3);
+        courseHistory4 = this.setCapacity(courseHistory4, 10, 0);
         courseHistory4.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.THURSDAY_1PM_TO_3PM, CourseType.LAB, TimeLine.WEDNESDAY_7PM_TO_9PM));
 
         Course courseHistory5= new Course();
         courseHistory5.setCourseName("COMP 6421");
         courseHistory5.setSemester(Semester.WINTER_2018);
         courseHistory5.setSection(1);
+        courseHistory5 = this.setCapacity(courseHistory5, 30, 3);
         courseHistory5.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.MONDAY_5PM_TO_7PM, CourseType.LAB, TimeLine.MONDAY_7PM_TO_9PM));
 
         Course courseHistory6= new Course();
         courseHistory6.setCourseName("COMP 6421");
         courseHistory6.setSemester(Semester.WINTER_2018);
         courseHistory6.setSection(2);
+        courseHistory6 = this.setCapacity(courseHistory6, 10, 0);
         courseHistory6.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.MONDAY_5PM_TO_7PM, CourseType.LAB, TimeLine.MONDAY_3PM_TO_5PM));
 
         Course courseHistory7= new Course();
         courseHistory7.setCourseName("COMP 6521");
         courseHistory7.setSemester(Semester.WINTER_2018);
         courseHistory7.setSection(1);
+        courseHistory7 =  this.setCapacity(courseHistory7, 30, 2);
         courseHistory7.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.WEDNESDAY_5PM_TO_7PM, CourseType.LAB, TimeLine.WEDNESDAY_3PM_TO_5PM));
 
         Course courseHistory8= new Course();
         courseHistory8.setCourseName("COMP 6521");
         courseHistory8.setSemester(Semester.WINTER_2018);
         courseHistory8.setSection(2);
+        courseHistory8 = this.setCapacity(courseHistory8, 30, 4);
         courseHistory8.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.WEDNESDAY_5PM_TO_7PM, CourseType.LAB, TimeLine.WEDNESDAY_7PM_TO_9PM));
 
         Course courseHistory9= new Course();
         courseHistory9.setCourseName("COMP 6721");
         courseHistory9.setSemester(Semester.WINTER_2018);
         courseHistory9.setSection(1);
+        courseHistory9 = this.setCapacity(courseHistory9, 23, 0);
         courseHistory9.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.THURSDAY_5PM_TO_7PM, CourseType.LAB, TimeLine.THURSDAY_7PM_TO_9PM));
 
         Course courseHistory10= new Course();
         courseHistory10.setCourseName("COMP 6741");
         courseHistory10.setSemester(Semester.WINTER_2018);
         courseHistory10.setSection(1);
+        courseHistory10 = this.setCapacity(courseHistory10, 14, 0);
         courseHistory10.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.WEDNESDAY_5PM_TO_7PM, CourseType.LAB, TimeLine.TUESDAY_3PM_TO_5PM));
 
         Course courseHistory11= new Course();
         courseHistory11.setCourseName("SOEN 691");
         courseHistory11.setSemester(Semester.WINTER_2018);
         courseHistory11.setSection(1);
+        courseHistory11 = this.setCapacity(courseHistory11, 18, 0);
         courseHistory11.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.WEDNESDAY_5PM_TO_7PM, CourseType.LAB, TimeLine.WEDNESDAY_3PM_TO_5PM));
 
         Course courseHistory12= new Course();
         courseHistory12.setCourseName("SOEN 6441");
         courseHistory12.setSemester(Semester.WINTER_2018);
         courseHistory12.setSection(1);
+        courseHistory12 = this.setCapacity(courseHistory12, 30, 2);
         courseHistory12.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.THURSDAY_5PM_TO_7PM, CourseType.LAB, TimeLine.THURSDAY_7PM_TO_9PM));
 
         Set<Course> courseHistories = new HashSet<>();
@@ -126,6 +145,7 @@ public class CoursesOffered {
         courseHistory.setPreRequisites("SOEN 1000");
         courseHistory.setSemester(Semester.FALL_2017);
         courseHistory.setSection(1);
+        courseHistory = this.setCapacity(courseHistory, 15, 0);
         courseHistory.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.MONDAY_9AM_TO_12PM, CourseType.LAB, TimeLine.FRIDAY_9AM_TO_12PM));
 
         Course courseHistory1 = new Course();
@@ -133,6 +153,7 @@ public class CoursesOffered {
         courseHistory1.setPreRequisites("COMP 5554");
         courseHistory1.setSemester(Semester.FALL_2017);
         courseHistory1.setSection(1);
+        courseHistory1 = this.setCapacity(courseHistory1, 7, 0);
         courseHistory1.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.MONDAY_3PM_TO_5PM, CourseType.LAB, TimeLine.FRIDAY_3PM_TO_5PM));
 
         Course courseHistory2 = new Course();
@@ -140,6 +161,7 @@ public class CoursesOffered {
         courseHistory2.setPreRequisites("COMP 3231");
         courseHistory2.setSemester(Semester.FALL_2017);
         courseHistory2.setSection(1);
+        courseHistory2 = this.setCapacity(courseHistory2, 24, 0);
         courseHistory2.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.MONDAY_5PM_TO_7PM, CourseType.TUTORIAL, TimeLine.FRIDAY_5PM_TO_7PM));
 
         Course courseHistory3 = new Course();
@@ -147,6 +169,7 @@ public class CoursesOffered {
         courseHistory3.setPreRequisites("ENCS 6250");
         courseHistory3.setSemester(Semester.FALL_2017);
         courseHistory3.setSection(1);
+        courseHistory3 = this.setCapacity(courseHistory3, 30, 0);
         courseHistory3.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.TUESDAY_9AM_TO_12PM, CourseType.TUTORIAL, TimeLine.THURSDAY_9AM_TO_12PM));
 
         Course courseHistory4 = new Course();
@@ -154,6 +177,7 @@ public class CoursesOffered {
         courseHistory4.setPreRequisites("ENCS 2221");
         courseHistory4.setSemester(Semester.FALL_2017);
         courseHistory4.setSection(1);
+        courseHistory4 = this.setCapacity(courseHistory4, 30, 0);
         courseHistory4.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.THURSDAY_3PM_TO_5PM, CourseType.TUTORIAL, TimeLine.THURSDAY_5PM_TO_7PM));
 
         Course courseHistory5 = new Course();
@@ -161,6 +185,7 @@ public class CoursesOffered {
         courseHistory5.setPreRequisites("ENCS 0000");
         courseHistory5.setSemester(Semester.FALL_2017);
         courseHistory5.setSection(1);
+        courseHistory5 = this.setCapacity(courseHistory5, 12, 0);
         courseHistory5.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.WEDNESDAY_7PM_TO_9PM, CourseType.TUTORIAL, TimeLine.THURSDAY_7PM_TO_9PM));
 
         Course courseHistory6 = new Course();
@@ -168,6 +193,7 @@ public class CoursesOffered {
         courseHistory6.setPreRequisites("ENCS 2220");
         courseHistory6.setSemester(Semester.FALL_2017);
         courseHistory6.setSection(1);
+        courseHistory6 = this.setCapacity(courseHistory6, 18, 0);
         courseHistory6.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.WEDNESDAY_3PM_TO_5PM, CourseType.TUTORIAL, TimeLine.WEDNESDAY_9AM_TO_12PM));
 
         Course courseHistory7 = new Course();
@@ -175,6 +201,7 @@ public class CoursesOffered {
         courseHistory7.setPreRequisites("ENCS 2220");
         courseHistory7.setSemester(Semester.FALL_2017);
         courseHistory7.setSection(2);
+        courseHistory7 = this.setCapacity(courseHistory7, 26, 0);
         courseHistory7.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.MONDAY_3PM_TO_5PM, CourseType.TUTORIAL, TimeLine.MONDAY_9AM_TO_12PM));
 
         Set<Course> courseHistories = new HashSet<>();
@@ -195,24 +222,28 @@ public class CoursesOffered {
         courseHistory2.setCourseName("COMP 6331");
         courseHistory2.setSemester(Semester.SUMMER_2018);
         courseHistory2.setSection(1);
+        courseHistory2 = this.setCapacity(courseHistory2, 5, 0);
         courseHistory2.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.TUESDAY_1PM_TO_3PM, CourseType.LAB, TimeLine.TUESDAY_7PM_TO_9PM));
 
         Course courseHistory5= new Course();
         courseHistory5.setCourseName("COMP 6421");
         courseHistory5.setSemester(Semester.SUMMER_2018);
         courseHistory5.setSection(1);
+        courseHistory5 = this.setCapacity(courseHistory2, 9, 0);
         courseHistory5.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.MONDAY_5PM_TO_7PM, CourseType.LAB, TimeLine.MONDAY_7PM_TO_9PM));
 
         Course courseHistory7= new Course();
         courseHistory7.setCourseName("COMP 6521");
         courseHistory7.setSemester(Semester.SUMMER_2018);
         courseHistory7.setSection(1);
+        courseHistory7 = this.setCapacity(courseHistory7, 3, 0);
         courseHistory7.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.WEDNESDAY_5PM_TO_7PM, CourseType.LAB, TimeLine.WEDNESDAY_3PM_TO_5PM));
 
         Course courseHistory12= new Course();
         courseHistory12.setCourseName("SOEN 6441");
         courseHistory12.setSemester(Semester.SUMMER_2018);
         courseHistory12.setSection(1);
+        courseHistory12 = this.setCapacity(courseHistory12, 20, 0);
         courseHistory12.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.THURSDAY_5PM_TO_7PM, CourseType.LAB, TimeLine.THURSDAY_7PM_TO_9PM));
 
         Set<Course> courseHistories = new HashSet<>();
@@ -304,5 +335,12 @@ public class CoursesOffered {
         courses.add(course2);
 
         return courses;
+    }
+
+    private Course setCapacity(Course course, int enrolled, int waitlisted) {
+        course.setEnrollementTotal(enrolled);
+        course.setWaitlistTotal(waitlisted);
+
+        return course;
     }
 }
