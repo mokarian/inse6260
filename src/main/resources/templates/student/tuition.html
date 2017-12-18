@@ -27,21 +27,14 @@
                 <div class="panel-heading">Tuition</span>
                 </div>
                 <div class="panel-body">
+                    <p style="color:#ffa308" th:utext="${message}"></p>
                     <h2>Due Now</h2>
                     <br>
-
-                    <p th:utext="${tuition}"></p>
-
-                    <p th:utext="${message}"></p>
-
+                        <p th:utext="${tuition}"></p>
                     <br>
                     <h2>Future Due</h2>
                     <br>
-
-                    <p th:utext="${tuition}"></p>
-
-                    <p th:utext="${message}"></p>
-
+                        <p th:utext="${futureTuition}"></p>
                     <br>
                     <h2>Payment</h2>
                     <div class="paymentWrap">

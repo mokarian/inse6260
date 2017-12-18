@@ -257,11 +257,18 @@ public class CoursesOffered {
         courseHistory3.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.MONDAY_3PM_TO_5PM, CourseType.TUTORIAL, TimeLine.FRIDAY_9AM_TO_12PM));
         courseHistory3.setSemester(Semester.WINTER_2017);
 
+        Course courseHistory4= new Course();
+        courseHistory4.setCourseName("COMP 6741");
+        courseHistory4.setSemester(Semester.WINTER_2018);
+        courseHistory4.setSection(1);
+        courseHistory4.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.WEDNESDAY_5PM_TO_7PM, CourseType.LAB, TimeLine.TUESDAY_3PM_TO_5PM));
+
         Set<Course> courseHistories = new HashSet<>();
         courseHistories.add(courseHistory);
         courseHistories.add(courseHistory1);
         courseHistories.add(courseHistory2);
         courseHistories.add(courseHistory3);
+        courseHistories.add(courseHistory4);
 
         return courseHistories;
     }

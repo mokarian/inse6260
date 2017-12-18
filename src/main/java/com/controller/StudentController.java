@@ -34,24 +34,13 @@ public class StudentController {
     private StudentService studentService;
 
     private String semesterToEnroll;
+    private double futureDue;
 
     @RequestMapping(value = "/student/home", method = RequestMethod.GET)
     public ModelAndView studentHome() {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-/*
-    Student student = new Student().makeStudent();
-        student.setPhone("322322323");
-        student.setAddress("dasd");
-    Set<Course> courses = new HashSet<>();
-    Course course = new Course();
-        course.setCourseName("ENCS 3121");
-        courses.add(course);
-        student.setCoursesForCurrentSemester(courses);
-        studentService.saveStudent(student);
-        */
-        // User user = userService.findUserByEmail(auth.getName());
-        // modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
+;
         modelAndView.addObject("studentMessage", "Content Available Only for Users with Student Role");
         modelAndView.setViewName("student/home");
         return modelAndView;
@@ -137,9 +126,10 @@ public class StudentController {
         courseListIterator.addAll(user.getCoursesForSemester(this.semesterToEnroll));
         ListIterator<Course> iterator = courseListIterator.listIterator();
         while (iterator.hasNext()) {
+            Course course = iterator.next();
             if (iterator.next().getCourseName().equalsIgnoreCase(courseId)) {
                 iterator.remove();
-                user.setCoursesForCurrentSemester(new HashSet<>(courseListIterator));
+                user.removeCoursesForSemester(course, this.semesterToEnroll);
                 studentService.saveStudent(user);
                 message = "course(" + courseId + ") dropped successfully ";
                 break;
@@ -149,7 +139,7 @@ public class StudentController {
         }
 
         List<String> list = new ArrayList<>();
-        for (Course course : courseListIterator) {
+        for (Course course : user.getCoursesForSemester(this.semesterToEnroll)) {
             list.add(course.getCourseName());
         }
 
@@ -170,12 +160,14 @@ public class StudentController {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Student user = studentService.findByEmail(auth.getName());
+
         List<Course> courses =studentService.getCoursesOfferedThisSemester(this.semesterToEnroll);
         String message = "";
+
         for(Course course:courses){
             if(course.getCourseName().equalsIgnoreCase(courseId)) {
                 if (noConflictsDetected(user.getCoursesForSemester(this.semesterToEnroll), course, user.getProgram())) {
-                    user.getCoursesForSemester(this.semesterToEnroll).add(course);
+                    user.setCoursesForSemester(course, this.semesterToEnroll);
                     studentService.saveStudent(user);
                     message = courseId + " added to your courses successfully";
                 } else {
@@ -272,6 +264,10 @@ public class StudentController {
         Student user = studentService.findByEmail(auth.getName());
 
         modelAndView.addObject("tuition", user.getTuition().toString());
+
+        this.futureDue = user.getFutureTuition();
+        modelAndView.addObject("futureTuition", futureDue);
+
         modelAndView.setViewName("student/tuition");
         return modelAndView;
     }
@@ -284,18 +280,23 @@ public class StudentController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Student user = studentService.findByEmail(auth.getName());
         String message = "";
+        BigDecimal futureTuition = new BigDecimal(this.futureDue);
         if (user.getTuition().subtract(new BigDecimal(stringRequest.getAmount())).signum() == -1) {
-            message = "the amount entered is more than your tuition fee";
+            message = "The Amount Paid is More Than Your Current Tuition Fees. Your Future Tuition Fees Have Been Updated Accordingly";
+            BigDecimal enteredAmount = new BigDecimal(stringRequest.getAmount());
+            futureTuition = futureTuition.subtract(enteredAmount.subtract(user.getTuition()));
+            user.setNewTuition(new BigDecimal(0));
+            this.futureDue = futureTuition.doubleValue();
         } else if (user.getTuition().subtract(new BigDecimal(stringRequest.getAmount())).signum() == +1) {
-            message = "the amount entered is not enough";
+            message = "The Amount Paid is Not Enough";
             user.setNewTuition(user.getTuition().subtract(new BigDecimal(stringRequest.getAmount())));
-            studentService.saveStudent(user);
         } else {
             user.setNewTuition(new BigDecimal(0));
-            studentService.saveStudent(user);
-            message = "you successfully payed your tuition fee";
+            message = "You Successfully Paid Your Current Tuition Fees";
         }
+        studentService.saveStudent(user);
         modelAndView.addObject("tuition", user.getTuition().toString()+" CAD");
+        modelAndView.addObject("futureTuition", futureDue +" CAD");
         modelAndView.addObject("message", message);
         modelAndView.setViewName("student/tuition");
         return modelAndView;

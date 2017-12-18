@@ -36,7 +36,7 @@ public class AdminController {
     @Autowired
     private StudentService studentService;
     @Autowired
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     private Student student;
     private List<Course> courseListIterator = new ArrayList<>();
@@ -159,7 +159,7 @@ public class AdminController {
 
             for (Course course : courses) {
                 if (course.getCourseName().equalsIgnoreCase(courseId) && noConflictsDetected(this.student.getCoursesForSemester(this.semesterToEnroll), course)) {
-                    this.student.getCoursesForSemester(this.semesterToEnroll).add(course);
+                    this.student.setCoursesForSemester(course, this.semesterToEnroll);
                     studentService.saveStudent(this.student);
                     message = courseId + " added to " + name + "'s courses successfully";
                 }
@@ -196,9 +196,10 @@ public class AdminController {
         courseListIterator.addAll(this.student.getCoursesForSemester(this.semesterToEnroll));
         ListIterator<Course> iterator = courseListIterator.listIterator();
         while (iterator.hasNext()) {
+            Course course = iterator.next();
             if (iterator.next().getCourseName().equalsIgnoreCase(courseId)) {
                 iterator.remove();
-                this.student.setCoursesForCurrentSemester(new HashSet<>(courseListIterator));
+                this.student.removeCoursesForSemester(course, this.semesterToEnroll);
                 studentService.saveStudent(this.student);
                 message = "course(" + courseId + ") dropped successfully ";
                 break;
@@ -208,7 +209,7 @@ public class AdminController {
         }
 
         List<String> list = new ArrayList<>();
-        for (Course course : courseListIterator) {
+        for (Course course : student.getCoursesForSemester(this.semesterToEnroll)) {
             list.add(course.getCourseName());
         }
 

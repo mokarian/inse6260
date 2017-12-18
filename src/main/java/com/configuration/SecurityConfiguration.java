@@ -159,9 +159,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         student.setCourseHistory(coursesOffered.createCourseHistory());
         student.setAddress("45 Forden Crescent, Westmount, Quebec H3Y 3H2 Canada");
         student.setPhone("(514)226-0101");
-        student.setTuition(status);
+        student.setTuition(status, Semester.FALL_2017.name());
         student.setProgram(program);
-        student.setStauts(status);
+        student.setStatus(status);
       //  studentRepository.save(student);
        // userRepository.save(student);
         return student;
