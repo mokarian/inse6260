@@ -1,9 +1,13 @@
 package com.controller;
 
+import com.model.Role;
 import com.model.User;
+import com.model.request.SemesterRequest;
 import com.model.request.StudentEmailRequest;
 import com.model.sc.Course;
 import com.model.sc.Student;
+import com.model.sc.enums.Semester;
+import com.repository.RoleRepository;
 import com.service.UserService;
 import com.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +35,18 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private RoleRepository roleRepository;
 
     private Student student;
     private List<Course> courseListIterator = new ArrayList<>();
+    private String semesterToEnroll;
 
     @RequestMapping(value = "admin/home", method = RequestMethod.GET)
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(auth.getName());
+        User user = this.userService.findUserByEmail(auth.getName());
         modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
         modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
         modelAndView.setViewName("admin/home");
@@ -65,15 +72,53 @@ public class AdminController {
 
         try {
             this.student = studentService.findByEmail(email);
-            return adminFoundStudentEnroll();
+            Role userRole = roleRepository.findByRole("STUDENT");
+            this.student.setRoles(new HashSet<>(Arrays.asList(userRole)));
+            return adminChooseTerm();
         } catch (NullPointerException e) {
             e.getMessage();
             return modelAndView;
         }
     }
 
-    @RequestMapping(value = "admin/foundstudentenroll/{courseId}", method = RequestMethod.GET)
-    public ModelAndView adminFoundStudentEnroll() {
+    @RequestMapping(value = "/admin/chooseterm", method = RequestMethod.GET)
+    public ModelAndView adminChooseTerm() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.addObject("semesterRequest", new SemesterRequest());
+
+        modelAndView.setViewName("admin/chooseterm");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/admin/chooseterm", method = RequestMethod.POST)
+    public ModelAndView adminChooseTermPost(SemesterRequest semesterRequest) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/chooseterm");
+
+        String semester ="";
+        semester = semesterRequest.getSemester();
+        if(semester.contains("F")) {
+            semester = Semester.FALL_2017.name();
+            this.semesterToEnroll = semester;
+            return adminFoundStudentEnroll(semester);
+        }
+        if(semester.contains("W")) {
+            semester = Semester.WINTER_2018.name();
+            this.semesterToEnroll = semester;
+            return adminFoundStudentEnroll(semester);
+        }
+        if(semester.contains("S")) {
+            semester = Semester.SUMMER_2018.name();
+            this.semesterToEnroll = semester;
+            return adminFoundStudentEnroll(semester);
+        }
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "admin/foundstudentenroll", method = RequestMethod.GET)
+    public ModelAndView adminFoundStudentEnroll(String semester) {
         ModelAndView modelAndView = new ModelAndView();
 
         String name = this.student.getName() +" " +this.student.getLastName();
@@ -82,14 +127,14 @@ public class AdminController {
         List<String> list = new ArrayList<>();
 
         List<Course> listOfCourses = new ArrayList<>();
-        listOfCourses.addAll(this.student.getCoursesForCurrentSemester());
+        listOfCourses.addAll(this.student.getCoursesForSemester(this.semesterToEnroll));
         for (Course course : listOfCourses) {
             list.add(course.getCourseName());
         }
         modelAndView.addObject("courses", list);
 
-        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
-        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester(semester));
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester(semester);
 
         modelAndView.addObject("coursesToAdd", listOfCoursesOffered);
         modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
@@ -108,13 +153,16 @@ public class AdminController {
         String message = "";
 
         if(!courseId.equals("")) {
-            List<Course> courses = studentService.getCoursesOfferedThisSemester();
+            List<Course> courses = studentService.getCoursesOfferedThisSemester(this.semesterToEnroll);
 
             for (Course course : courses) {
-                if (course.getCourseName().equalsIgnoreCase(courseId) && noConflictsDetected(this.student.getCoursesForCurrentSemester(), course)) {
-                    this.student.getCoursesForCurrentSemester().add(course);
-                    studentService.saveStudent(this.student);
-                    message = courseId + " added to " + name + "'s courses successfully";
+                if (course.getCourseName().equalsIgnoreCase(courseId)) {
+                    if (noConflictsDetected(this.student.getCoursesForSemester(this.semesterToEnroll), course)) {
+                        this.student.setCoursesForSemester(course, this.semesterToEnroll);
+                        studentService.saveStudent(this.student);
+                        message = courseId + " added to " + name + "'s courses successfully";
+                    } else
+                        message = courseId + " could not be added to " + name + "'s courses";
                 }
             }
         }
@@ -124,14 +172,14 @@ public class AdminController {
         List<String> list = new ArrayList<>();
 
         List<Course> listOfCourses = new ArrayList<>();
-        listOfCourses.addAll(this.student.getCoursesForCurrentSemester());
+        listOfCourses.addAll(this.student.getCoursesForSemester(this.semesterToEnroll));
         for (Course course : listOfCourses) {
             list.add(course.getCourseName());
         }
         modelAndView.addObject("courses", list);
 
-        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
-        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester(this.semesterToEnroll));
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester(this.semesterToEnroll);
 
         modelAndView.addObject("coursesToAdd", listOfCoursesOffered);
         modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
@@ -144,14 +192,18 @@ public class AdminController {
     public ModelAndView adminDrop(@PathVariable String courseId) {
         ModelAndView modelAndView = new ModelAndView();
 
+        String name = this.student.getName() +" " +this.student.getLastName();
+        modelAndView.addObject("studentName", name);
+
         String message = "";
         List<Course> courseListIterator = new ArrayList();
-        courseListIterator.addAll(this.student.getCoursesForCurrentSemester());
+        courseListIterator.addAll(this.student.getCoursesForSemester(this.semesterToEnroll));
         ListIterator<Course> iterator = courseListIterator.listIterator();
         while (iterator.hasNext()) {
-            if (iterator.next().getCourseName().equalsIgnoreCase(courseId)) {
+            Course course = iterator.next();
+            if (course.getCourseName().equalsIgnoreCase(courseId)) {
                 iterator.remove();
-                this.student.setCoursesForCurrentSemester(new HashSet<>(courseListIterator));
+                this.student.removeCoursesForSemester(course, this.semesterToEnroll);
                 studentService.saveStudent(this.student);
                 message = "course(" + courseId + ") dropped successfully ";
                 break;
@@ -161,19 +213,18 @@ public class AdminController {
         }
 
         List<String> list = new ArrayList<>();
-        for (Course course : courseListIterator) {
+        for (Course course : student.getCoursesForSemester(this.semesterToEnroll)) {
             list.add(course.getCourseName());
         }
 
         modelAndView.addObject("courses", list);
 
         modelAndView.addObject("message", message);
-        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
-        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester(this.semesterToEnroll));
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester(this.semesterToEnroll);
 
         modelAndView.addObject("coursesToAdd", listOfCoursesOffered);
         modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
-
         modelAndView.setViewName("admin/foundstudentenroll");
         return modelAndView;
     }
@@ -192,6 +243,8 @@ public class AdminController {
             if(c.getSchedules().contains(course.getSchedules())){
                 return false;
             }
+            if(c.getCourseName().equals(course.getCourseName()))
+                return false;
         }
         return true;
     }
@@ -200,10 +253,10 @@ public class AdminController {
     public ModelAndView adminModifyCourseSection() {
         ModelAndView modelAndView = new ModelAndView();
 
-        this.courseListIterator.addAll(studentService.getCoursesOfferedThisSemester());
+        this.courseListIterator.addAll(studentService.getCoursesOfferedThisSemester(this.semesterToEnroll));
 
-        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester());
-        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester();
+        List<String> listOfCoursesOffered = getCourseName(studentService.getCoursesOfferedThisSemester(this.semesterToEnroll));
+        List<Course> listOfCoursesOfferedFull = studentService.getCoursesOfferedThisSemester(this.semesterToEnroll);
 
         modelAndView.addObject("coursesToModify", listOfCoursesOffered);
         modelAndView.addObject("coursesToModifyFull", listOfCoursesOfferedFull);

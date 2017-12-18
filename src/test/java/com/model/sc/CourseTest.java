@@ -1,5 +1,6 @@
 package com.model.sc;
 
+import com.model.sc.enums.Semester;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -61,7 +62,7 @@ public class CourseTest {
 
     @Test
     public void getSemester() throws Exception {
-        String expectedSemester = "FALL 2017";
+        Semester expectedSemester = Semester.FALL_2017;
         this.course.setSemester(expectedSemester);
 
         Assert.assertEquals(expectedSemester, this.course.getSemester());

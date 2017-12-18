@@ -1,4 +1,4 @@
-package com.model.sc;
+package com.model.sc.enums;
 
 /**
  * A program type enum

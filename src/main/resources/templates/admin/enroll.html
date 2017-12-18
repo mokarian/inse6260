@@ -32,7 +32,7 @@
                     <form  th:action="@{/admin/enroll}" method="post" th:object="${studentEmailRequest}">
                         <div class="col-xs-2">
                             <input class="form-control" type="text" th:field="*{studentEmail}">
-                            <form th:action="@{/foundstudentenroll}" method="get">
+                            <form th:action="@{/chooseterm}" method="get">
                                 <button class="btn btn-primary btn-md btn-success" type="Submit">Search</button>
                             </form>
                         </div>

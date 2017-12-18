@@ -33,9 +33,10 @@
                         <h3 th:utext="${studentName}"></h3>
                     </form>
                     <div>
+                        <p style="color:#ffa308" th:utext="${message}"></p>
                         <table class="table table-striped">
                             <tr>
-                                <th>Courses taken for current semester</th> <th> </th>
+                                <th>Registered Courses for Chosen Semester</th> <th> </th>
                             </tr>
                             <tr th:each="course : ${courses}">
 
@@ -59,8 +60,6 @@
                             </tr>
                         </table>
                     </div>
-
-                    <p th:utext="${message}"></p>
                 </div>
             </div>
         </div>

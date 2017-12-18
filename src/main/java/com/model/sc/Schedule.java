@@ -1,5 +1,8 @@
 package com.model.sc;
 
+import com.model.sc.enums.CourseType;
+import com.model.sc.enums.TimeLine;
+
 /**
  * A schedule object
  *

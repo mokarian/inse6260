@@ -30,11 +30,11 @@ public class StudentService {
         studentRepository.saveAndFlush(student);
     }
 
-    public List<Course> getCoursesOfferedThisSemester(){
+    public List<Course> getCoursesOfferedThisSemester(String semester){
         List<Course> courses= courseRepository.findAll();
         List<Course> coursesThisSemester= new ArrayList<>();
         for(Course course:courses){
-            if("FALL 2017".equalsIgnoreCase(course.getSemester())){
+            if(semester.equalsIgnoreCase(course.getSemester())){
                 coursesThisSemester.add(course);
             }
         }

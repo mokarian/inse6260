@@ -1,10 +1,13 @@
 package com.model.sc;
 
 import com.model.User;
-import com.model.sc.Course;
+import com.model.sc.enums.ProgramType;
+import com.model.sc.enums.Semester;
+import com.model.sc.enums.StudentStatus;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Set;
 import java.util.*;
 
 /**
@@ -22,10 +25,10 @@ public class Student extends User {
     private String address;
     @Column(name = "phone")
     private String phone;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_coursehistory", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "coursehistory_id"))
     private Set<Course> courseHistory;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_course", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
     private Set<Course> coursesForCurrentSemester;
     @Column(name = "tuition")
@@ -33,7 +36,7 @@ public class Student extends User {
     @Column(name = "program")
     private ProgramType program;
     @Column(name = "status")
-    private StudentStatus stauts;
+    private StudentStatus status;
 
     public String getAddress() {
         return address;
@@ -56,7 +59,53 @@ public class Student extends User {
     }
 
     public void setCoursesForCurrentSemester(Set<Course> coursesForCurrentSemester) {
-        this.coursesForCurrentSemester = coursesForCurrentSemester;
+            this.coursesForCurrentSemester = coursesForCurrentSemester;
+    }
+
+    public void setCoursesForSemester(Course course, String semester) {
+        if(semester.equalsIgnoreCase("FALL_2017")) {
+            Set<Course> courseToAdd = new HashSet<>();
+            courseToAdd.addAll(coursesForCurrentSemester);
+            courseToAdd.add(course);
+            setCoursesForCurrentSemester(courseToAdd);
+        }
+        else {
+            this.courseHistory.add(course);
+        }
+    }
+
+    public void removeCoursesForSemester(Course course, String semester) {
+        Set<Course> courses = new HashSet<>();
+        if(semester.equalsIgnoreCase("FALL_2017")) {
+            for(Course c : this.coursesForCurrentSemester)
+                if(!c.getCourseName().equalsIgnoreCase(course.getCourseName()))
+                    courses.add(c);
+
+        }
+        Set<Course> courses2 = new HashSet<>();
+        for(Course c : this.courseHistory)
+            if(!c.getCourseName().equalsIgnoreCase(course.getCourseName()))
+                courses2.add(c);
+
+        this.coursesForCurrentSemester = courses;
+        this.courseHistory = courses2;
+    }
+
+    public Set<Course> getCoursesForSemester(String semester) {
+        if(semester.equalsIgnoreCase("FALL_2017"))
+            return getCoursesForCurrentSemester();
+
+        ArrayList<Course> courses = new ArrayList<>(this.courseHistory);
+        Set<Course> semesterCourses = new HashSet<>();
+
+        for(int i = 0; i < courses.size(); i++) {
+            Course course = courses.get(i);
+            if(course.getSemester().equalsIgnoreCase(semester)) {
+                semesterCourses.add(course);
+            }
+        }
+
+        return semesterCourses;
     }
 
     public BigDecimal getTuition() {
@@ -67,30 +116,30 @@ public class Student extends User {
      * A method for setting the tuition of a student according to their status
      * @param status
      */
-    public void setTuition(StudentStatus status) {
+    public void setTuition(StudentStatus status, String semester) {
         double tuition = 0.0;
-        double compulsuaryFeesPart = 371.23;
-        double compulsuaryFeesFull = 489.26;
+        double compulsoryFeesPart = 371.23;
+        double compulsoryFeesFull = 489.26;
         double healthInsurance = 204.42;
 
         // Check the immigration status
         // Quebec Resident
         if(status.equals(StudentStatus.QCRESIDENT)) {
             // Find out if student is a full time or a part time student
-            if(this.getCoursesForCurrentSemester().size() > 1)
+            if(this.getCoursesForSemester(semester).size() > 1)
                 // Full time student
                 tuition += 896.63;
-            else if(this.getCoursesForCurrentSemester().size() == 1)
+            else if(this.getCoursesForSemester(semester).size() == 1)
                 // Part time student
                 tuition += 597.75;
         }
         // Canadian and non-Quebec Resident
         else if(status.equals(StudentStatus.CANADIAN)) {
             // Find out if student is a full time or a part time student
-            if(this.getCoursesForCurrentSemester().size() > 1)
+            if(this.getCoursesForSemester(semester).size() > 1)
                 // Full time student
                 tuition += 2776.05;
-            else if(this.getCoursesForCurrentSemester().size() == 1)
+            else if(this.getCoursesForSemester(semester).size() == 1)
                 // Part time student
                 tuition += 1850.70;
         }
@@ -98,20 +147,67 @@ public class Student extends User {
         else if(status.equals(StudentStatus.INTERNATIONAL)) {
             healthInsurance = 732.64;
             // Find out if student is a full time or a part time student
-            if(this.getCoursesForCurrentSemester().size() > 1)
+            if(this.getCoursesForSemester(semester).size() > 1)
                 // Full time student
                 tuition += 6140.03;
-            else if(this.getCoursesForCurrentSemester().size() == 1)
+            else if(this.getCoursesForSemester(semester).size() == 1)
                 // Part time student
                 tuition += 4093.35;
         }
 
         if(this.getCoursesForCurrentSemester().size() > 1)
-            tuition += healthInsurance + compulsuaryFeesFull;
+            tuition += healthInsurance + compulsoryFeesFull;
         else
-            tuition += healthInsurance + compulsuaryFeesPart;
+            tuition += healthInsurance + compulsoryFeesPart;
 
         this.tuition = new BigDecimal(tuition);
+    }
+
+    public double getFutureTuition() {
+        double tuition = 0.0;
+        double compulsoryFeesPart = 371.23;
+        double compulsoryFeesFull = 489.26;
+        double healthInsurance = 204.42;
+
+        // Check the immigration status
+        // Quebec Resident
+        if(this.status.equals(StudentStatus.QCRESIDENT)) {
+            // Find out if student is a full time or a part time student
+            if(this.getCoursesForSemester(Semester.WINTER_2018.name()).size() > 1)
+                // Full time student
+                tuition += 896.63;
+            else if(this.getCoursesForSemester(Semester.WINTER_2018.name()).size() == 1)
+                // Part time student
+                tuition += 597.75;
+        }
+        // Canadian and non-Quebec Resident
+        else if(status.equals(StudentStatus.CANADIAN)) {
+            // Find out if student is a full time or a part time student
+            if(this.getCoursesForSemester(Semester.WINTER_2018.name()).size() > 1)
+                // Full time student
+                tuition += 2776.05;
+            else if(this.getCoursesForSemester(Semester.WINTER_2018.name()).size() == 1)
+                // Part time student
+                tuition += 1850.70;
+        }
+        // International
+        else if(status.equals(StudentStatus.INTERNATIONAL)) {
+            healthInsurance = 732.64;
+            // Find out if student is a full time or a part time student
+            if(this.getCoursesForSemester(Semester.WINTER_2018.name()).size() > 1)
+                // Full time student
+                tuition += 6140.03;
+            else if(this.getCoursesForSemester(Semester.WINTER_2018.name()).size() == 1)
+                // Part time student
+                tuition += 4093.35;
+        }
+
+        if(this.getCoursesForCurrentSemester().size() > 1)
+            tuition += healthInsurance + compulsoryFeesFull;
+        else
+            tuition += healthInsurance + compulsoryFeesPart;
+
+        return tuition;
     }
 
     public void setNewTuition(BigDecimal tuition) {
@@ -124,12 +220,12 @@ public class Student extends User {
         this.program = program;
     }
 
-    public StudentStatus getStauts() {
-        return stauts;
+    public StudentStatus getStatus() {
+        return status;
     }
 
-    public void setStauts(StudentStatus stauts) {
-        this.stauts = stauts;
+    public void setStatus(StudentStatus status) {
+        this.status = status;
     }
 
     public String getPhone() {

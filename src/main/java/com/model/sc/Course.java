@@ -1,8 +1,11 @@
 package com.model.sc;
 
 
+import com.model.sc.enums.CourseType;
+import com.model.sc.enums.Semester;
+import com.model.sc.enums.TimeLine;
+
 import javax.persistence.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -27,7 +30,8 @@ public class Course {
     @Column (name = "section")
     private int section;
     private String schedules;
-    private String semester;
+    @Column (name = "semester")
+    private Semester semester;
     private float grade;
 
     /**
@@ -100,14 +104,14 @@ public class Course {
      * @return the semester
      */
     public String getSemester() {
-        return semester;
+        return semester.toString();
     }
 
     /**
      * A setter for the semester the course is taught
      * @param semester
      */
-    public void setSemester(String semester) {
+    public void setSemester(Semester semester) {
         this.semester = semester;
     }
 
