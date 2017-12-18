@@ -75,10 +75,20 @@ public class Student extends User {
     }
 
     public void removeCoursesForSemester(Course course, String semester) {
+        Set<Course> courses = new HashSet<>();
         if(semester.equalsIgnoreCase("FALL_2017")) {
-            this.coursesForCurrentSemester.remove(course);
+            for(Course c : this.coursesForCurrentSemester)
+                if(!c.getCourseName().equalsIgnoreCase(course.getCourseName()))
+                    courses.add(c);
+
         }
-        this.courseHistory.remove(course);
+        Set<Course> courses2 = new HashSet<>();
+        for(Course c : this.courseHistory)
+            if(!c.getCourseName().equalsIgnoreCase(course.getCourseName()))
+                courses2.add(c);
+
+        this.coursesForCurrentSemester = courses;
+        this.courseHistory = courses2;
     }
 
     public Set<Course> getCoursesForSemester(String semester) {

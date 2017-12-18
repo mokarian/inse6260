@@ -230,8 +230,15 @@ public class CoursesOffered {
         courseHistory.setPreRequisites("INSE 6250");
         courseHistory.setGrade(3.4f);
         courseHistory.setSection(1);
-        courseHistory.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.WEDNESDAY_1PM_TO_3PM, CourseType.LAB, TimeLine.THURSDAY_7PM_TO_9PM));
-        courseHistory.setSemester(Semester.FALL_2016);
+        courseHistory.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.FRIDAY_5PM_TO_7PM, CourseType.LAB, TimeLine.MONDAY_1PM_TO_3PM));
+        courseHistory.setSemester(Semester.FALL_2017);
+
+        Course course2 = new Course();
+        course2.setCourseName("COMP 6761");
+        course2.setPreRequisites("COMP 6311");
+        course2.setSection(1);
+        course2.setSchedules(getSchedules(CourseType.LECTURE, TimeLine.WEDNESDAY_1PM_TO_3PM, CourseType.LAB, TimeLine.THURSDAY_7PM_TO_9PM));
+        course2.setSemester(Semester.FALL_2017);
 
         Course courseHistory1 = new Course();
         courseHistory1.setCourseName("COMP 352");
@@ -265,6 +272,7 @@ public class CoursesOffered {
 
         Set<Course> courseHistories = new HashSet<>();
         courseHistories.add(courseHistory);
+        courseHistories.add(course2);
         courseHistories.add(courseHistory1);
         courseHistories.add(courseHistory2);
         courseHistories.add(courseHistory3);

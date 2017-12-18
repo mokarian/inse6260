@@ -127,14 +127,14 @@ public class StudentController {
         ListIterator<Course> iterator = courseListIterator.listIterator();
         while (iterator.hasNext()) {
             Course course = iterator.next();
-            if (iterator.next().getCourseName().equalsIgnoreCase(courseId)) {
+            if (course.getCourseName().equalsIgnoreCase(courseId)) {
                 iterator.remove();
                 user.removeCoursesForSemester(course, this.semesterToEnroll);
                 studentService.saveStudent(user);
                 message = "course(" + courseId + ") dropped successfully ";
                 break;
             } else {
-                message = "course(" + courseId + ") was not find in the list of courses ";
+                message = "course(" + courseId + ") was not found in the list of courses ";
             }
         }
 
@@ -163,16 +163,23 @@ public class StudentController {
 
         List<Course> courses =studentService.getCoursesOfferedThisSemester(this.semesterToEnroll);
         String message = "";
+        boolean found = false;
 
         for(Course course:courses){
-            if(course.getCourseName().equalsIgnoreCase(courseId)) {
+            if(course.getCourseName().equalsIgnoreCase(courseId) && !found) {
                 if (noConflictsDetected(user.getCoursesForSemester(this.semesterToEnroll), course, user.getProgram())) {
                     user.setCoursesForSemester(course, this.semesterToEnroll);
                     studentService.saveStudent(user);
                     message = courseId + " added to your courses successfully";
                 } else {
-                    message = courseId + " could not be added to your courses, please go see an advisor to add it.";
+                    if(user.getCoursesForSemester(this.semesterToEnroll).size() >= 3)
+                        message = courseId + " could not be added to your courses because you have reached the maximum course load.";
+                    else if(!course.getCourseName().contains(user.getProgram().toString()))
+                        message = courseId + " could not be added to your courses because it is not withing your faculty, please go see an advisor to add it.";
+                    else
+                        message = courseId + " could not be added to your courses due to a conflict or you have already registered in it";
                 }
+                found = true;
             }
         }
 
@@ -204,6 +211,8 @@ public class StudentController {
             if(c.getSchedules().contains(course.getSchedules())){
                 return false;
             }
+            if(c.getCourseName().equals(course.getCourseName()))
+                return false;
         }
         return true;
     }
