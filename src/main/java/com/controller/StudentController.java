@@ -243,7 +243,7 @@ public class StudentController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Student user = studentService.findByEmail(auth.getName());
 
-        modelAndView.addObject("courses", user.getCoursesForSemester(this.semesterToEnroll));
+        modelAndView.addObject("courses", user.getCoursesForCurrentSemester());
         modelAndView.setViewName("student/schedule");
         return modelAndView;
     }
@@ -257,7 +257,6 @@ public class StudentController {
         user.getCumulativeGPA();
 
         List<Course> Courses = new ArrayList<>(user.getCourseHistory());
-        Courses.addAll(user.getCoursesForSemester(this.semesterToEnroll));
         List<String> gpaList = new ArrayList<>();
         Set<String> years= new HashSet<>();
         for (Course course : Courses) {
