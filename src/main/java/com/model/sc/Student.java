@@ -253,8 +253,14 @@ public class Student extends User {
         for (Course course : courseHistory) {
             year = (course.getSemester().substring(course.getSemester().length() - 4, course.getSemester().length()));
             if (gpa.containsKey(year)) {
-                Float previousGrade = gpa.get(year);
-                gpa.put(year, (previousGrade + course.getGrade()) / 2);
+                if(course.getGrade() > 0.0) {
+                    if(gpa.get(year) > 0.0) {
+                        Float previousGrade = gpa.get(year);
+                        gpa.put(year, (previousGrade + course.getGrade()) / 2);
+                    } else {
+                        gpa.put(year, course.getGrade());
+                    }
+                }
             } else {
                 gpa.put(year, course.getGrade());
             }
@@ -280,8 +286,10 @@ public class Student extends User {
         float sum = 0;
         int counter = 0;
         for (Course course : courseHistory) {
-            sum = sum + course.getGrade();
-            counter++;
+            if (course.getGrade() != 0.0f) {
+                sum = sum + course.getGrade();
+                counter++;
+            }
         }
         List<Course> courses = new ArrayList<>(coursesForCurrentSemester);
         for (Course course : courses) {
