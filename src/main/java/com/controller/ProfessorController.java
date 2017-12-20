@@ -6,6 +6,7 @@ import com.model.request.GradeRequest;
 import com.model.sc.Course;
 import com.model.sc.Student;
 import com.model.sc.Teacher;
+import com.model.sc.enums.Semester;
 import com.repository.TeacherRepository;
 import com.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,9 +74,14 @@ public class ProfessorController {
         Set<Course> courseSet = student.getCoursesForCurrentSemester();
         List<Course> courses = new ArrayList<>();
         courses.addAll(courseSet);
+        student.removeCoursesForSemester(courses.get(0), Semester.FALL_2017.name());
         courses.get(0).setGrade(gradeRequest.getGrade());
         Set<Course> courses1 = new HashSet<>(courses);
         student.setCoursesForCurrentSemester(courses1);
+
+        student.getCourseHistory().add(courses.get(0));
+        student.setCourseHistory(student.getCourseHistory());
+
         students.remove(0);
         students.add(student);
 

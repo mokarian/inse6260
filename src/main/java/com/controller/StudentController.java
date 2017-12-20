@@ -4,6 +4,7 @@ import com.model.request.ContactInfoRequest;
 import com.model.request.SemesterRequest;
 import com.model.request.TuitionRequest;
 import com.model.sc.Course;
+import com.model.sc.ImportantDates;
 import com.model.sc.enums.ProgramType;
 import com.model.sc.Student;
 import com.model.sc.enums.Semester;
@@ -124,23 +125,33 @@ public class StudentController {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Student user = studentService.findByEmail(auth.getName());
+
         String message = "";
+        ImportantDates dates = new ImportantDates();
+        Date disc = dates.getDISC(this.semesterToEnroll);
+        Date dne = dates.getDNE(this.semesterToEnroll);
+        Date today = new Date();
+        disc.setYear(Integer.parseInt(semesterToEnroll.substring(this.semesterToEnroll.length()-4, this.semesterToEnroll.length())));
+        dne.setYear(Integer.parseInt(semesterToEnroll.substring(this.semesterToEnroll.length()-4, this.semesterToEnroll.length())));
+        //today.setMonth(11);
+        //today.setDate(1);
+
         List<Course> courseListIterator = new ArrayList();
         courseListIterator.addAll(user.getCoursesForSemester(this.semesterToEnroll));
         ListIterator<Course> iterator = courseListIterator.listIterator();
         while (iterator.hasNext()) {
             Course course = iterator.next();
             if (course.getCourseName().equalsIgnoreCase(courseId)) {
-                iterator.remove();
-                user.removeCoursesForSemester(course, this.semesterToEnroll);
-                studentService.saveStudent(user);
-                if(course.getEnrollementTotal() >= course.getCapacity())
-                    course.setWaitlistTotal(course.getWaitlistTotal()-1);
-                else
-                    course.setEnrollementTotal(course.getEnrollementTotal()-1);
-                courseService.saveCourse(course);
-                message = "course(" + courseId + ") dropped successfully ";
-                break;
+                if(today.before(dne)) {
+                    message = getMsgBeforeDNE(courseId, user, iterator, course);
+                    break;
+                } else if(today.before(disc)) {
+                    message = getMsgBeforeDISC(courseId, user.getCourseHistory(), user, course);
+                    break;
+                } else {
+                    message = "course(" + courseId + ") could not be dropped since it is passed the DISC deadline. Please go see an advisor to drop it.";
+                    break;
+                }
             } else {
                 message = "course(" + courseId + ") was not found in the list of courses ";
             }
@@ -161,6 +172,44 @@ public class StudentController {
         modelAndView.addObject("coursesToAddFull", listOfCoursesOfferedFull);
         modelAndView.setViewName("student/enroll");
         return modelAndView;
+    }
+
+    private String getMsgBeforeDISC(String courseId, Set<Course> courseHistory, Student user, Course course) {
+        String message;
+
+//        List<Course> courses = new ArrayList<>(courseHistory);
+//        ListIterator<Course> iterator = courses.listIterator();
+//        while (iterator.hasNext()) {
+//            if(iterator.next().getCourseName().equals(course.getCourseName()))
+//                iterator.remove();
+//        }
+        user.removeCoursesForSemester(course, this.semesterToEnroll);
+
+        course.setGrade(-1.0f);
+        user.getCourseHistory().add(course);
+        user.setCourseHistory(user.getCourseHistory());
+        studentService.saveStudent(user);
+        if (course.getEnrollementTotal() >= course.getCapacity())
+            course.setWaitlistTotal(course.getWaitlistTotal() - 1);
+        else
+            course.setEnrollementTotal(course.getEnrollementTotal() - 1);
+        courseService.saveCourse(course);
+        message = "course(" + courseId + ") discontinued successfully ";
+        return message;
+    }
+
+    private String getMsgBeforeDNE(@PathVariable String courseId, Student user, ListIterator<Course> iterator, Course course) {
+        String message;
+        iterator.remove();
+        user.removeCoursesForSemester(course, this.semesterToEnroll);
+        studentService.saveStudent(user);
+        if (course.getEnrollementTotal() >= course.getCapacity())
+            course.setWaitlistTotal(course.getWaitlistTotal() - 1);
+        else
+            course.setEnrollementTotal(course.getEnrollementTotal() - 1);
+        courseService.saveCourse(course);
+        message = "course(" + courseId + ") dropped successfully ";
+        return message;
     }
 
     @RequestMapping(value = "student/enroll/{courseId}", method = RequestMethod.GET)
@@ -188,7 +237,7 @@ public class StudentController {
                     }
                     courseService.saveCourse(course);
                 } else {
-                    if(course.getWaitlistTotal() >= course.getWaitlistTotal())
+                    if(course.getWaitlistTotal() >= course.getWaitlistCapacity())
                         message = courseId + " could not be added to your courses because the course and waitlist is full.";
                     else if(user.getCoursesForSemester(this.semesterToEnroll).size() >= 3)
                         message = courseId + " could not be added to your courses because you have reached the maximum course load.";
@@ -269,7 +318,15 @@ public class StudentController {
                 gpaList.add(year+": GPA: "+CGPA);
             }
             years.add(year);
-            String grade = course.getGrade()!=0.0f?""+course.getGrade():"Not Posted";
+
+            String grade = "";
+            if(course.getGrade() == -1.0f)
+                grade = "DISC";
+            else if(course.getGrade() == 0.0f)
+                grade = "Not Posted";
+            else
+                grade += course.getGrade();
+
             String space = " | ";
             String semester = course.getSemester().substring(0,course.getSemester().length()-5);
             gpaList.add(year +" | " +semester +space +course.getCourseName() +space +grade);
